@@ -3,9 +3,12 @@
  * el sitio en https://usuario.github.io/<repo>/ — así se detectan las
  * rutas que solo funcionarían en la raíz del dominio.
  */
-const http = require('http');
-const fs = require('fs');
-const path = require('path');
+import http from 'http';
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const root = path.join(__dirname, '..', '_site');
 const base = '/axia-odontologia-web';

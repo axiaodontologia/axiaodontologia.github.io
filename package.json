@@ -1,0 +1,18 @@
+{
+  "name": "axia-odontologia-web",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Sitio web de Axia Odontología — clínica odontológica en Barranquilla",
+  "type": "module",
+  "scripts": {
+    "build:pages": "node scripts/build-pages.js",
+    "dev": "node scripts/dev-server.js",
+    "preview:pages": "node scripts/build-pages.js && node scripts/serve-site.js"
+  },
+  "dependencies": {
+    "resend": "^4.0.1"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
