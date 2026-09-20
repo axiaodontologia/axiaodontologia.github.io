@@ -1,0 +1,22 @@
+# Dependencias
+node_modules/
+
+# Variables de entorno — nunca subir claves
+.env
+.env.local
+.env.*.local
+
+# Build del sitio para GitHub Pages (se genera en cada despliegue)
+_site/
+
+# Másteres de video y fotos sin optimizar (cientos de MB, no van al repo)
+_fuentes/
+
+# Documentación interna de cliente: estrategia, presupuestos de pauta,
+# datos sin confirmar. No debe quedar en un repositorio público.
+uploads/
+
+# Sistema
+.DS_Store
+Thumbs.db
+.thumbnail

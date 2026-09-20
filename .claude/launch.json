@@ -1,0 +1,22 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "axia-static",
+      "runtimeExecutable": "node",
+      "runtimeArgs": [
+        "scripts/dev-server.js"
+      ],
+      "port": 4321
+    },
+    {
+      "name": "axia-pages",
+      "runtimeExecutable": "node",
+      "runtimeArgs": [
+        "scripts/serve-site.js"
+      ],
+      "port": 4322,
+      "url": "http://localhost:4322"
+    }
+  ]
+}
