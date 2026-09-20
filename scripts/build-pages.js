@@ -76,9 +76,11 @@ html = html.replace(/<image-slot\b([^>]*)><\/image-slot>/g, (tag) => {
 // Sin slots, el componente y su sidecar ya no hacen falta en la página.
 html = html.replace(/\s*<script src="\.\/image-slot\.js"><\/script>/, '');
 
-// 3b. GitHub Pages es estático: no puede correr /api/contact. Se marca para
-//     que el formulario avise en vez de fingir que envió el mensaje.
-html = html.replace(
+// 3b. Si el destino no tiene backend (GitHub Pages), se marca para que el
+//     formulario avise en vez de fingir que envió el mensaje. Con
+//     --con-backend (Firebase + Cloud Function) no se marca.
+const conBackend = process.argv.includes('--con-backend');
+if (!conBackend) html = html.replace(
   '<script src="./support.js"></script>',
   '<script>window.AXIA_SIN_BACKEND = true;</script>\n<script src="./support.js"></script>'
 );

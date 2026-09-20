@@ -1,0 +1,14 @@
+{
+  "name": "axia-functions",
+  "description": "Funciones serverless de Axia Odontología — envío del formulario de contacto",
+  "type": "module",
+  "main": "index.js",
+  "private": true,
+  "engines": {
+    "node": "20"
+  },
+  "dependencies": {
+    "firebase-functions": "^6.1.0",
+    "resend": "^4.0.1"
+  }
+}

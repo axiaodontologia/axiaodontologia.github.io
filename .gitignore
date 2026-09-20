@@ -20,3 +20,6 @@ uploads/
 .DS_Store
 Thumbs.db
 .thumbnail
+
+# Caché local de despliegues de Firebase
+.firebase/
