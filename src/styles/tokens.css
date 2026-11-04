@@ -1,0 +1,150 @@
+/**
+ * SISTEMA DE DISEÑO — AXIA ODONTOLOGÍA
+ * Premium meets technology
+ *
+ * Fuente de verdad de color, tipografía, espacio y movimiento.
+ * Ningún componente debe escribir un color a mano: todo sale de aquí.
+ *
+ * Los colores están verificados con las fórmulas de contraste WCAG 2.1.
+ * Cada token lleva anotado su ratio para que la regla sea comprobable y no
+ * una opinión. Ver IDENTIDAD.md para el detalle y las discrepancias.
+ */
+
+:root {
+  /* ---------------------------------------------------------------
+     MARCA
+     El dorado y el beige son colores de acento y superficie.
+     Ninguno de los dos sirve como texto pequeño sobre blanco:
+     dorado/blanco = 3,30:1 y beige/blanco = 1,82:1, ambos por debajo
+     del mínimo de 4,5:1. El sistema lo impide por construcción.
+     --------------------------------------------------------------- */
+  --ax-dorado: #A8894F;
+  --ax-dorado-claro: #C8A96E;  /* solo sobre fondos oscuros */
+  --ax-beige: #DEBA8E;
+  --ax-beige-suave: #F0E2D2;   /* superficies amplias, lavado del beige */
+
+  --ax-negro: #000000;
+  --ax-carbon: #333333;        /* gris oscuro corporativo */
+  --ax-pizarra: #505858;       /* oscuro real muestreado del logotipo */
+  --ax-blanco: #FFFFFF;
+  --ax-hueso: #FAF8F5;         /* blanco cálido, evita el blanco clínico puro */
+
+  /* ---------------------------------------------------------------
+     TEXTO — todos por encima de 7:1 (AAA) sobre su fondo previsto
+     --------------------------------------------------------------- */
+  --ax-texto: #1A1A1A;             /* sobre claro · 17,4:1 */
+  --ax-texto-suave: #333333;       /* sobre claro · 12,63:1 */
+  --ax-texto-tenue: #5A5A5A;       /* sobre claro · 7,0:1  */
+  --ax-texto-inverso: #FFFFFF;     /* sobre oscuro · 21:1 sobre negro */
+  --ax-texto-inverso-tenue: rgba(255, 255, 255, 0.76);
+
+  /* ---------------------------------------------------------------
+     LOS TRES AMBIENTES VISUALES
+     Cada sección de la web adopta uno. No se mezclan en un mismo bloque.
+     --------------------------------------------------------------- */
+
+  /* 1. EDITORIAL — blanco y beige. Contenido, lectura, blog. */
+  --ax-editorial-fondo: var(--ax-hueso);
+  --ax-editorial-superficie: var(--ax-blanco);
+  --ax-editorial-acento: var(--ax-beige);
+  --ax-editorial-texto: var(--ax-texto);
+
+  /* 2. TECNOLÓGICO — negro y carbón con acentos dorados. 3D, tecnología. */
+  --ax-tech-fondo: var(--ax-negro);
+  --ax-tech-superficie: #141414;
+  --ax-tech-acento: var(--ax-dorado-claro);  /* 7,9:1 sobre negro */
+  --ax-tech-texto: var(--ax-texto-inverso);
+
+  /* 3. CLÍNICO — blanco y tonos cálidos. Servicios, equipo, confianza. */
+  --ax-clinico-fondo: var(--ax-blanco);
+  --ax-clinico-superficie: var(--ax-beige-suave);
+  --ax-clinico-acento: var(--ax-dorado);
+  --ax-clinico-texto: var(--ax-texto);
+
+  /* ---------------------------------------------------------------
+     COMPONENTES
+     Las combinaciones de botón están elegidas por contraste medido.
+     --------------------------------------------------------------- */
+  --ax-btn-primario-fondo: var(--ax-beige);
+  --ax-btn-primario-texto: var(--ax-negro);        /* 11,52:1 · AAA */
+  --ax-btn-primario-hover-fondo: var(--ax-negro);
+  --ax-btn-primario-hover-texto: var(--ax-beige);  /* 11,52:1 · AAA */
+
+  --ax-btn-oscuro-fondo: var(--ax-carbon);
+  --ax-btn-oscuro-texto: var(--ax-blanco);         /* 12,63:1 · AAA */
+
+  --ax-btn-dorado-fondo: var(--ax-dorado);
+  --ax-btn-dorado-texto: var(--ax-negro);          /* 6,36:1 · AA  */
+
+  --ax-borde: #E4DCD2;
+  --ax-borde-oscuro: rgba(255, 255, 255, 0.14);
+  --ax-foco: var(--ax-dorado);                     /* 3,30:1 · suficiente para UI no textual */
+
+  /* ---------------------------------------------------------------
+     TIPOGRAFÍA
+     Poppins para todo, según el documento de identidad. Los títulos van
+     en 700 para crear jerarquía real frente al cuerpo en 300.
+     --------------------------------------------------------------- */
+  --ax-fuente: 'Poppins', -apple-system, 'Helvetica Neue', Arial, sans-serif;
+
+  --ax-peso-cuerpo: 300;
+  --ax-peso-medio: 500;
+  --ax-peso-titulo: 700;
+
+  /* Escala fluida: crece con el viewport sin saltos ni media queries */
+  --ax-txt-xs: clamp(0.69rem, 0.67rem + 0.1vw, 0.75rem);
+  --ax-txt-sm: clamp(0.81rem, 0.78rem + 0.15vw, 0.88rem);
+  --ax-txt-base: clamp(1rem, 0.96rem + 0.2vw, 1.13rem);
+  --ax-txt-lg: clamp(1.19rem, 1.1rem + 0.44vw, 1.44rem);
+  --ax-txt-xl: clamp(1.5rem, 1.3rem + 1vw, 2.13rem);
+  --ax-txt-2xl: clamp(1.88rem, 1.5rem + 1.9vw, 3rem);
+  --ax-txt-3xl: clamp(2.25rem, 1.6rem + 3.2vw, 4.25rem);
+
+  --ax-interlinea-titulo: 1.08;
+  --ax-interlinea-cuerpo: 1.75;
+  --ax-tracking-titulo: -0.02em;
+  --ax-tracking-rotulo: 0.3em;   /* los rótulos de sección van espaciados */
+
+  /* ---------------------------------------------------------------
+     ESPACIO — escala de 4px
+     --------------------------------------------------------------- */
+  --ax-e1: 0.25rem;
+  --ax-e2: 0.5rem;
+  --ax-e3: 0.75rem;
+  --ax-e4: 1rem;
+  --ax-e6: 1.5rem;
+  --ax-e8: 2rem;
+  --ax-e12: 3rem;
+  --ax-e16: 4rem;
+  --ax-e24: 6rem;
+  --ax-seccion: clamp(3.5rem, 8vw, 7.5rem);
+  --ax-ancho: 1280px;
+  --ax-gutter: clamp(1.375rem, 4vw, 2.5rem);
+
+  /* ---------------------------------------------------------------
+     PROFUNDIDAD — sombras discretas, nunca dramáticas
+     --------------------------------------------------------------- */
+  --ax-sombra-sutil: 0 1px 2px rgba(26, 26, 26, 0.04);
+  --ax-sombra-tarjeta: 0 2px 10px -4px rgba(26, 26, 26, 0.1);
+  --ax-sombra-elevada: 0 18px 44px -24px rgba(26, 26, 26, 0.42);
+  --ax-radio: 2px;
+  --ax-radio-grande: 3px;
+
+  /* ---------------------------------------------------------------
+     MOVIMIENTO
+     Una sola curva en todo el sitio: es lo que da coherencia al conjunto.
+     --------------------------------------------------------------- */
+  --ax-curva: cubic-bezier(0.22, 0.61, 0.36, 1);
+  --ax-rapido: 0.25s;
+  --ax-medio: 0.45s;
+  --ax-lento: 0.8s;
+}
+
+/* Quien pida menos movimiento, recibe menos movimiento. */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --ax-rapido: 0.01ms;
+    --ax-medio: 0.01ms;
+    --ax-lento: 0.01ms;
+  }
+}

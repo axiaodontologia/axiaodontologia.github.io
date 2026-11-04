@@ -1,0 +1,142 @@
+/**
+ * Estilos base. Todo valor sale de tokens.css; aquí no se inventa color.
+ */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--ax-editorial-fondo);
+  color: var(--ax-texto);
+  font-family: var(--ax-fuente);
+  font-weight: var(--ax-peso-cuerpo);
+  font-size: var(--ax-txt-base);
+  line-height: var(--ax-interlinea-cuerpo);
+  -webkit-font-smoothing: antialiased;
+  text-wrap: pretty;
+}
+
+h1,
+h2,
+h3,
+h4,
+p,
+ul,
+ol,
+figure,
+blockquote {
+  margin: 0;
+  padding: 0;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-weight: var(--ax-peso-titulo);
+  line-height: var(--ax-interlinea-titulo);
+  letter-spacing: var(--ax-tracking-titulo);
+  text-wrap: balance;
+}
+
+h1 { font-size: var(--ax-txt-3xl); }
+h2 { font-size: var(--ax-txt-2xl); }
+h3 { font-size: var(--ax-txt-lg); }
+
+ul,
+ol {
+  list-style: none;
+}
+
+img,
+video {
+  max-width: 100%;
+  display: block;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  font-family: inherit;
+}
+
+/* Foco siempre visible: es el único modo de navegar con teclado. */
+:focus-visible {
+  outline: 2px solid var(--ax-foco);
+  outline-offset: 3px;
+  border-radius: var(--ax-radio);
+}
+
+::selection {
+  background: var(--ax-beige);
+  color: var(--ax-negro);
+}
+
+input,
+textarea,
+select {
+  font-family: inherit;
+  font-size: 16px; /* por debajo de 16px iOS hace zoom al enfocar */
+  font-weight: var(--ax-peso-cuerpo);
+}
+
+/* Salto al contenido: invisible hasta que se tabula. */
+.ax-saltar {
+  position: absolute;
+  left: -9999px;
+  top: var(--ax-e2);
+  z-index: 200;
+  background: var(--ax-negro);
+  color: var(--ax-blanco);
+  padding: var(--ax-e3) var(--ax-e4);
+}
+
+.ax-saltar:focus {
+  left: var(--ax-e2);
+}
+
+/* Contenedor estándar */
+.ax-contenedor {
+  max-width: var(--ax-ancho);
+  margin-inline: auto;
+  padding-inline: var(--ax-gutter);
+}
+
+/* «El eje»: la hairline dorada vertical que antecede cada rótulo de
+   sección. Es el elemento firma de la marca, un guiño a Axia / axis. */
+.ax-rotulo {
+  position: relative;
+  padding-left: 20px;
+  font-size: var(--ax-txt-xs);
+  letter-spacing: var(--ax-tracking-rotulo);
+  text-transform: uppercase;
+  color: var(--ax-texto-tenue);
+}
+
+.ax-rotulo::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 1px;
+  height: clamp(20px, 2.4vw, 30px);
+  background: var(--ax-dorado);
+}
+
+/* Sobre fondo oscuro el rótulo usa el dorado claro, que sí contrasta. */
+.ax-oscuro .ax-rotulo {
+  color: var(--ax-tech-acento);
+}

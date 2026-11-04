@@ -1,0 +1,103 @@
+---
+/**
+ * Layout base — resuelve el problema de fondo de la auditoría.
+ *
+ * Todo lo que un buscador o el bot de WhatsApp necesita viaja ya escrito en
+ * el HTML que sale del servidor: title, description, canonical, Open Graph,
+ * Twitter Cards y JSON-LD. Antes lo inyectaba JavaScript después de cargar,
+ * y los rastreadores —que no ejecutan JS— veían una página vacía.
+ */
+import { SITIO } from '../config/sitio.js';
+import '../styles/tokens.css';
+import '../styles/base.css';
+
+const {
+  titulo,
+  descripcion,
+  ruta,
+  imagen = '/assets/images/hero/odontologia-barranquilla-axia-poster.webp',
+  tipo = 'website',
+  noindex = false,
+  schema = null,
+} = Astro.props;
+
+const canonical = new URL(ruta, SITIO.url).href;
+const imagenAbs = new URL(imagen, SITIO.url).href;
+
+// Datos estructurados mínimos presentes en todas las páginas.
+// No se declaran aggregateRating ni review: no existen reseñas verificables
+// todavía, e inventarlas sería una infracción de las directrices de Google.
+const grafoBase = [
+  {
+    '@type': 'Dentist',
+    '@id': SITIO.url + '/#clinica',
+    name: SITIO.nombre,
+    url: SITIO.url,
+    image: imagenAbs,
+    telephone: '+' + SITIO.whatsapp,
+    email: SITIO.email,
+    address: {
+      '@type': 'PostalAddress',
+      streetAddress: SITIO.direccion.calle,
+      addressLocality: SITIO.direccion.ciudad,
+      addressRegion: SITIO.direccion.region,
+      addressCountry: SITIO.direccion.pais,
+    },
+    sameAs: [SITIO.redes.instagram, SITIO.redes.tiktok],
+  },
+  {
+    '@type': 'WebSite',
+    '@id': SITIO.url + '/#web',
+    url: SITIO.url,
+    name: SITIO.nombre,
+    inLanguage: SITIO.idioma,
+    publisher: { '@id': SITIO.url + '/#clinica' },
+  },
+];
+
+const grafo = schema ? [...grafoBase, ...schema] : grafoBase;
+---
+
+<!doctype html>
+<html lang={SITIO.idioma}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>{titulo}</title>
+    <meta name="description" content={descripcion} />
+    <link rel="canonical" href={canonical} />
+    <meta name="robots" content={noindex ? 'noindex,follow' : 'index,follow'} />
+
+    <meta property="og:type" content={tipo} />
+    <meta property="og:title" content={titulo} />
+    <meta property="og:description" content={descripcion} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={imagenAbs} />
+    <meta property="og:locale" content="es_CO" />
+    <meta property="og:site_name" content={SITIO.nombre} />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={titulo} />
+    <meta name="twitter:description" content={descripcion} />
+    <meta name="twitter:image" content={imagenAbs} />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap"
+    />
+
+    <script type="application/ld+json" set:html={JSON.stringify({ '@context': 'https://schema.org', '@graph': grafo })} />
+  </head>
+
+  <body>
+    <a class="ax-saltar" href="#principal">Saltar al contenido</a>
+    <slot name="cabecera" />
+    <main id="principal">
+      <slot />
+    </main>
+    <slot name="pie" />
+  </body>
+</html>

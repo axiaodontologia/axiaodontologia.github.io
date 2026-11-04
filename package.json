@@ -10,6 +10,8 @@
     "preview:pages": "node scripts/build-pages.js && node scripts/serve-site.js"
   },
   "dependencies": {
+    "@astrojs/sitemap": "^3.7.4",
+    "astro": "5.18.2",
     "resend": "^4.0.1"
   },
   "engines": {
