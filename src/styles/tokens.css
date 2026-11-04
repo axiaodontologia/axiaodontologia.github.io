@@ -65,16 +65,20 @@
      COMPONENTES
      Las combinaciones de botón están elegidas por contraste medido.
      --------------------------------------------------------------- */
-  --ax-btn-primario-fondo: var(--ax-beige);
-  --ax-btn-primario-texto: var(--ax-negro);        /* 11,52:1 · AAA */
+  /* El dorado es el color principal de la marca; el gris, el secundario.
+     Con texto negro el dorado da 6,36:1 (AA). Con texto blanco solo da
+     3,30:1, así que esa combinación no se usa para texto de botón. */
+  --ax-btn-primario-fondo: var(--ax-dorado);
+  --ax-btn-primario-texto: var(--ax-negro);        /* 6,36:1 · AA  */
   --ax-btn-primario-hover-fondo: var(--ax-negro);
-  --ax-btn-primario-hover-texto: var(--ax-beige);  /* 11,52:1 · AAA */
+  --ax-btn-primario-hover-texto: var(--ax-dorado); /* 6,36:1 · AA  */
 
   --ax-btn-oscuro-fondo: var(--ax-carbon);
   --ax-btn-oscuro-texto: var(--ax-blanco);         /* 12,63:1 · AAA */
 
-  --ax-btn-dorado-fondo: var(--ax-dorado);
-  --ax-btn-dorado-texto: var(--ax-negro);          /* 6,36:1 · AA  */
+  /* El beige queda como superficie y acento secundario, nunca como texto. */
+  --ax-btn-beige-fondo: var(--ax-beige);
+  --ax-btn-beige-texto: var(--ax-negro);           /* 11,52:1 · AAA */
 
   --ax-borde: #E4DCD2;
   --ax-borde-oscuro: rgba(255, 255, 255, 0.14);

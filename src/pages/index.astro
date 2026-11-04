@@ -15,6 +15,8 @@ import { ARTICULOS } from '../data/articulos.js';
 import { META } from '../data/meta.js';
 import { SECCION_3D, SECCION_CLINICA, SECCION_RESULTADOS, SECCION_RESENAS, FAQS } from '../data/portada.js';
 import { SITIO, wa } from '../config/sitio.js';
+import VideoAuto from '../components/VideoAuto.astro';
+import Resenas from '../components/Resenas.astro';
 
 const m = META.home;
 const destacados = ARTICULOS.slice(0, 3);
@@ -208,14 +210,12 @@ const schema = [
   <!-- EXPERIENCIA DE PACIENTE -->
   <section class="ax-seccion ax-editorial" aria-labelledby="home-exp">
     <div class="ax-contenedor ax-split ax-split--video">
-      <div class="ax-video" data-video>
-        <video
-          src="/assets/video/testimonio-paciente-axia.mp4"
-          poster="/assets/images/experiencia/poster-testimonio-paciente.webp"
-          preload="none"
-          playsinline
-          controls></video>
-      </div>
+      <VideoAuto
+        src="/assets/video/testimonio-paciente-axia.mp4"
+        poster="/assets/images/experiencia/poster-testimonio-paciente.webp"
+        titulo="Testimonio de una paciente de Axia Odontología"
+        duracion="1:35"
+      />
       <div>
         <p class="ax-rotulo">La experiencia de nuestros pacientes</p>
         <h2 id="home-exp" class="ax-titulo-seccion">No te contamos cómo es. Te lo cuenta una paciente</h2>
@@ -238,20 +238,7 @@ const schema = [
   </section>
 
   <!-- RESEÑAS -->
-  <section class="ax-seccion ax-clinico" aria-labelledby="home-resenas">
-    <div class="ax-contenedor">
-      <p class="ax-rotulo">Reseñas de Google</p>
-      <h2 id="home-resenas" class="ax-titulo-seccion">{SECCION_RESENAS.titulo}</h2>
-      <div class="ax-aviso-resenas">
-        <p>
-          Sección conectada al perfil de Google Business de Axia Odontología.
-          <strong>Pendiente:</strong> crear o reclamar el perfil y obtener su
-          Place ID para traer las reseñas reales. Hasta entonces no se publica
-          ninguna reseña ni calificación: no inventamos testimonios.
-        </p>
-      </div>
-    </div>
-  </section>
+  <Resenas />
 
   <!-- BLOG -->
   <section class="ax-seccion ax-editorial" aria-labelledby="home-blog">
