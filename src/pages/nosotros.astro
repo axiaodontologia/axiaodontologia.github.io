@@ -137,7 +137,7 @@ const schema = [
     </div>
   </section>
 
-  <section class="ax-seccion ax-oscuro">
+  <section class="ax-seccion ax-dorado">
     <div class="ax-contenedor ax-centrado">
       <h2>Conoce la clínica en persona</h2>
       <p class="ax-cta__texto">Agenda una consulta de diagnóstico y te mostramos cómo trabajamos.</p>
@@ -199,10 +199,11 @@ const schema = [
   /* Panel cálido detrás de la foto: unifica los recortes, que vienen de
      sesiones distintas y con fondos distintos (cuatro transparentes y uno
      blanco sólido). */
+  /* Sin panel: los retratos son recortes con transparencia y se apoyan
+     directamente sobre el fondo de la página. */
   .ax-equipo__foto {
     position: relative;
     aspect-ratio: 3 / 4;
-    background: var(--ax-clinico-superficie);
     overflow: hidden;
     margin-bottom: var(--ax-e6);
   }
@@ -247,6 +248,6 @@ const schema = [
 
   .ax-centrado { text-align: center; }
   .ax-centrado h2 { max-width: 20ch; margin-inline: auto; }
-  .ax-cta__texto { margin: var(--ax-e6) auto 0; max-width: 56ch; color: var(--ax-texto-inverso-tenue); }
+  .ax-cta__texto { margin: var(--ax-e6) auto 0; max-width: 56ch; color: var(--ax-dorado-texto-tenue); }
   .ax-botonera--centro { justify-content: center; margin-top: var(--ax-e8); }
 </style>

@@ -7,11 +7,11 @@ import { SITIO, wa } from '../config/sitio.js';
 import { SERVICIOS } from '../data/servicios.js';
 ---
 
-<footer class="ax-pie ax-oscuro">
+<footer class="ax-pie ax-dorado">
   <div class="ax-contenedor ax-pie__rejilla">
     <div>
       <img
-        src="/assets/logos/axia-odontologia-logo-blanco.webp"
+        src="/assets/logos/axia-odontologia-logo-negro.webp"
         alt={SITIO.nombre}
         width="132"
         height="132"
@@ -73,8 +73,6 @@ import { SERVICIOS } from '../data/servicios.js';
 
 <style>
   .ax-pie {
-    background: var(--ax-tech-fondo);
-    color: var(--ax-texto-inverso);
     padding-block: var(--ax-e24) var(--ax-e8);
   }
 
@@ -93,7 +91,7 @@ import { SERVICIOS } from '../data/servicios.js';
     margin-top: var(--ax-e4);
     max-width: 34ch;
     font-size: var(--ax-txt-sm);
-    color: var(--ax-texto-inverso-tenue);
+    color: var(--ax-dorado-texto-tenue);
   }
 
   .ax-pie ul {
@@ -104,7 +102,7 @@ import { SERVICIOS } from '../data/servicios.js';
   }
 
   .ax-pie a {
-    color: var(--ax-texto-inverso-tenue);
+    color: var(--ax-dorado-texto-tenue);
     /* objetivo táctil cómodo */
     display: inline-flex;
     align-items: center;
@@ -113,23 +111,23 @@ import { SERVICIOS } from '../data/servicios.js';
   }
 
   .ax-pie a:hover {
-    color: var(--ax-tech-acento);
+    color: var(--ax-negro);
   }
 
   .ax-pie address {
     font-style: normal;
-    color: var(--ax-texto-inverso-tenue);
+    color: var(--ax-dorado-texto-tenue);
   }
 
   .ax-pie__legal {
     margin-top: var(--ax-e16);
     padding-top: var(--ax-e6);
-    border-top: 1px solid var(--ax-borde-oscuro);
+    border-top: 1px solid var(--ax-dorado-borde);
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
     gap: var(--ax-e3);
     font-size: var(--ax-txt-xs);
-    color: var(--ax-texto-inverso-tenue);
+    color: var(--ax-dorado-texto-tenue);
   }
 </style>

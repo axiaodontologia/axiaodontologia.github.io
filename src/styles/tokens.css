@@ -55,6 +55,13 @@
   --ax-tech-acento: var(--ax-dorado-claro);  /* 7,9:1 sobre negro */
   --ax-tech-texto: var(--ax-texto-inverso);
 
+  /* 4. DORADO — el color de marca como superficie. Solo admite texto
+     oscuro: blanco sobre dorado da 3,30:1 y no pasa. Con negro, 6,36:1. */
+  --ax-dorado-fondo: var(--ax-dorado);
+  --ax-dorado-texto: var(--ax-negro);              /* 6,36:1 · AA  */
+  --ax-dorado-texto-tenue: rgba(0, 0, 0, 0.72);
+  --ax-dorado-borde: rgba(0, 0, 0, 0.18);
+
   /* 3. CLÍNICO — blanco y tonos cálidos. Servicios, equipo, confianza. */
   --ax-clinico-fondo: var(--ax-blanco);
   --ax-clinico-superficie: var(--ax-beige-suave);
