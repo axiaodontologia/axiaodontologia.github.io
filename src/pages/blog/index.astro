@@ -1,0 +1,66 @@
+---
+import Pagina from '../../layouts/Pagina.astro';
+import { ARTICULOS } from '../../data/articulos.js';
+import { META } from '../../data/meta.js';
+import { SITIO } from '../../config/sitio.js';
+
+const m = META.blog;
+const schema = [{
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Inicio', item: SITIO.url + '/' },
+    { '@type': 'ListItem', position: 2, name: 'Blog', item: SITIO.url + '/blog' },
+  ],
+}];
+---
+
+<Pagina titulo={m.title} descripcion={m.desc} ruta="/blog" schema={schema}>
+  <section class="ax-seccion ax-editorial">
+    <div class="ax-contenedor">
+      <p class="ax-rotulo">Centro de recursos</p>
+      <h1 style="margin-block: var(--ax-e6); max-width: 22ch">Blog de salud oral y odontología</h1>
+      <p style="max-width: 60ch; color: var(--ax-texto-suave); font-size: var(--ax-txt-lg)">
+        Respuestas a lo que más nos preguntan en consulta, escritas por el
+        equipo de Axia Odontología.
+      </p>
+
+      <ul class="ax-lista-blog">
+        {ARTICULOS.map((a) => (
+          <li>
+            <a href={`/blog/${a.slug}`}>
+              <div class="ax-lista-blog__img">
+                <img src={a.imgSrc} alt={a.h1} width="1200" height="800" loading="lazy" decoding="async" />
+              </div>
+              <p class="ax-lista-blog__cluster">{a.cluster}</p>
+              <h2>{a.h1}</h2>
+              <p class="ax-lista-blog__teaser">{a.teaser}</p>
+              <p class="ax-lista-blog__meta"><time datetime={a.iso}>{a.date}</time> · {a.read}</p>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+</Pagina>
+
+<style>
+  .ax-lista-blog {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+    gap: var(--ax-e12);
+    margin-top: var(--ax-e16);
+  }
+  .ax-lista-blog__img { aspect-ratio: 3 / 2; overflow: hidden; }
+  .ax-lista-blog__img img {
+    width: 100%; height: 100%; object-fit: cover;
+    transition: transform 1.1s var(--ax-curva);
+  }
+  .ax-lista-blog li:hover .ax-lista-blog__img img { transform: scale(1.055); }
+  .ax-lista-blog__cluster {
+    margin-top: var(--ax-e4); font-size: var(--ax-txt-xs);
+    letter-spacing: 0.18em; text-transform: uppercase; color: var(--ax-dorado);
+  }
+  .ax-lista-blog h2 { margin-top: var(--ax-e2); font-size: var(--ax-txt-lg); }
+  .ax-lista-blog__teaser { margin-top: var(--ax-e3); color: var(--ax-texto-tenue); font-size: var(--ax-txt-sm); }
+  .ax-lista-blog__meta { margin-top: var(--ax-e3); font-size: var(--ax-txt-xs); color: var(--ax-texto-tenue); }
+</style>

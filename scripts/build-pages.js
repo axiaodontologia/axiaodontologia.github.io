@@ -76,6 +76,20 @@ html = html.replace(/<image-slot\b([^>]*)><\/image-slot>/g, (tag) => {
 // Sin slots, el componente y su sidecar ya no hacen falta en la página.
 html = html.replace(/\s*<script src="\.\/image-slot\.js"><\/script>/, '');
 
+// 3a-bis. El navegador lee <video src="{{ heroVideoSrc }}"> antes de que el
+//   runtime resuelva la expresión, e intenta descargar ese texto como si
+//   fuera una URL: dos 404 en cada carga. Como la ruta del video es un
+//   valor fijo conocido en build, se sustituye aquí.
+const mVideo = html.match(/&quot;heroVideoSrc&quot;:\{[^}]*?&quot;default&quot;:&quot;([^&]*)&quot;/);
+let videosResueltos = 0;
+if (mVideo && mVideo[1]) {
+  const rutaVideo = mVideo[1];
+  html = html.replace(/src="\{\{ heroVideoSrc \}\}"/g, () => {
+    videosResueltos++;
+    return 'src="' + rutaVideo + '"';
+  });
+}
+
 // 3b. Si el destino no tiene backend (GitHub Pages), se marca para que el
 //     formulario avise en vez de fingir que envió el mensaje. Con
 //     --con-backend (Firebase + Cloud Function) no se marca.
@@ -106,5 +120,6 @@ fs.writeFileSync(
 );
 
 console.log('rutas reescritas: ' + n + ' absolutas, ' + p + ' con public/, ' + v + ' en data-props');
+console.log('video del hero resuelto en ' + videosResueltos + ' lugares');
 console.log('image-slot -> ' + convertidos + ' imágenes, ' + neutros + ' bloques pendientes');
 console.log('build listo en _site/');

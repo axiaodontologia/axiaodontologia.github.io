@@ -1,0 +1,383 @@
+---
+/**
+ * Contacto.
+ *
+ * El formulario está completo y valida en el cliente. Lo que NO hace es
+ * fingir: si el envío falla —hoy falla, porque /api/contact necesita el
+ * plan Blaze para salir a internet y llamar a Resend— lo dice y ofrece
+ * WhatsApp. Un paciente que cree haber escrito y nunca recibe respuesta
+ * es peor que no tener formulario.
+ */
+import Pagina from '../layouts/Pagina.astro';
+import { META } from '../data/meta.js';
+import { SITIO, wa } from '../config/sitio.js';
+import { SERVICIOS } from '../data/servicios.js';
+
+const m = META.contacto;
+const waPrincipal = wa('Hola, quiero agendar una cita en Axia Odontología.');
+const direccionBusqueda = encodeURIComponent(
+  `${SITIO.direccion.calle}, ${SITIO.direccion.ciudad}, ${SITIO.direccion.region}, Colombia`
+);
+
+const schema = [
+  {
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Inicio', item: SITIO.url + '/' },
+      { '@type': 'ListItem', position: 2, name: 'Contacto', item: SITIO.url + '/contacto' },
+    ],
+  },
+];
+---
+
+<Pagina titulo={m.title} descripcion={m.desc} ruta="/contacto" schema={schema}>
+  <section class="ax-seccion ax-editorial">
+    <div class="ax-contenedor">
+      <p class="ax-rotulo">Contacto</p>
+      <h1 class="ax-titulo-contacto">Agenda tu cita en Axia Odontología</h1>
+      <p class="ax-entrada">
+        Lo más rápido es WhatsApp: te respondemos en horario de atención. Si
+        prefieres, déjanos tus datos y te escribimos nosotros.
+      </p>
+      <a href={waPrincipal} class="ax-btn ax-btn--primario ax-btn--suelto" data-track="whatsapp_click" data-origin="contacto_hero">
+        Hablar por WhatsApp
+      </a>
+    </div>
+  </section>
+
+  <section class="ax-seccion ax-clinico">
+    <div class="ax-contenedor ax-contacto">
+      <div class="ax-contacto__form">
+        <h2>Escríbenos</h2>
+        <p class="ax-form__nota">Los campos marcados con * son obligatorios.</p>
+
+        <form id="ax-form" novalidate>
+          <!-- Trampa para bots: invisible para una persona. -->
+          <div class="ax-miel" aria-hidden="true">
+            <label for="ax-website">No rellenar</label>
+            <input id="ax-website" name="website" type="text" tabindex="-1" autocomplete="off" />
+          </div>
+
+          <div class="ax-form__fila">
+            <label for="ax-name">
+              <span>Nombre *</span>
+              <input id="ax-name" name="name" type="text" autocomplete="given-name" required minlength="2" />
+              <em data-error for-field="name"></em>
+            </label>
+            <label for="ax-last">
+              <span>Apellido *</span>
+              <input id="ax-last" name="lastname" type="text" autocomplete="family-name" required minlength="2" />
+              <em data-error for-field="lastname"></em>
+            </label>
+          </div>
+
+          <div class="ax-form__fila">
+            <label for="ax-email">
+              <span>Correo electrónico *</span>
+              <input id="ax-email" name="email" type="email" autocomplete="email" required />
+              <em data-error for-field="email"></em>
+            </label>
+            <label for="ax-phone">
+              <span>Teléfono / WhatsApp *</span>
+              <input id="ax-phone" name="phone" type="tel" autocomplete="tel" required inputmode="tel" />
+              <em data-error for-field="phone"></em>
+            </label>
+          </div>
+
+          <div class="ax-form__fila">
+            <label for="ax-service">
+              <span>Tratamiento de interés</span>
+              <select id="ax-service" name="service">
+                <option value="Aún no lo sé">Aún no lo sé</option>
+                {SERVICIOS.map((s) => <option value={s.nav}>{s.nav}</option>)}
+              </select>
+            </label>
+            <label for="ax-preference">
+              <span>Cómo prefieres que te contactemos</span>
+              <select id="ax-preference" name="preference">
+                <option value="WhatsApp">WhatsApp</option>
+                <option value="Llamada">Llamada</option>
+                <option value="Email">Email</option>
+              </select>
+            </label>
+          </div>
+
+          <label for="ax-msg">
+            <span>Cuéntanos qué necesitas *</span>
+            <textarea id="ax-msg" name="message" rows="5" required minlength="10"></textarea>
+            <em data-error for-field="message"></em>
+          </label>
+
+          <label class="ax-form__consentimiento" for="ax-consent">
+            <input id="ax-consent" name="consent" type="checkbox" required />
+            <span>
+              Autorizo el tratamiento de mis datos personales conforme a la
+              <a href="/politica-de-privacidad">política de privacidad</a>, para
+              que Axia Odontología me contacte sobre mi solicitud. *
+            </span>
+          </label>
+          <em data-error for-field="consent" class="ax-error-suelto"></em>
+
+          <button type="submit" class="ax-btn ax-btn--primario" data-enviar>Enviar solicitud</button>
+        </form>
+
+        <div class="ax-resultado" data-resultado hidden role="status" aria-live="polite"></div>
+      </div>
+
+      <aside class="ax-contacto__datos">
+        <h2>Datos de contacto</h2>
+        <dl>
+          <dt class="ax-rotulo">WhatsApp</dt>
+          <dd><a href={waPrincipal}>+57 315 967 9895</a></dd>
+
+          <dt class="ax-rotulo">Email</dt>
+          <dd><a href={`mailto:${SITIO.email}`}>{SITIO.email}</a></dd>
+
+          <dt class="ax-rotulo">Dirección</dt>
+          <dd>
+            <address>
+              {SITIO.direccion.calle}<br />
+              {SITIO.direccion.ciudad}, {SITIO.direccion.region}
+            </address>
+          </dd>
+
+          <dt class="ax-rotulo">Atención</dt>
+          <dd>Con cita previa.</dd>
+        </dl>
+
+        <p class="ax-contacto__pendiente">
+          <strong>Pendiente:</strong> confirmar los horarios de atención antes
+          de publicarlos.
+        </p>
+      </aside>
+    </div>
+  </section>
+
+  <!-- MAPA -->
+  <section class="ax-mapa-seccion" aria-labelledby="mapa">
+    <div class="ax-contenedor">
+      <p class="ax-rotulo">Cómo llegar</p>
+      <h2 id="mapa" class="ax-titulo-contacto">Estamos en el norte de Barranquilla</h2>
+      <p class="ax-entrada">{SITIO.direccion.calle}, {SITIO.direccion.ciudad}, {SITIO.direccion.region}.</p>
+    </div>
+    <div class="ax-mapa">
+      <iframe
+        title="Ubicación de Axia Odontología en Barranquilla"
+        src={`https://www.google.com/maps?q=${direccionBusqueda}&output=embed&hl=es`}
+        loading="lazy"
+        referrerpolicy="no-referrer-when-downgrade"
+        allowfullscreen></iframe>
+    </div>
+    <div class="ax-contenedor">
+      <a
+        href={`https://www.google.com/maps/search/?api=1&query=${direccionBusqueda}`}
+        rel="noopener"
+        class="ax-btn ax-btn--contorno ax-btn--suelto">Abrir en Google Maps</a
+      >
+    </div>
+  </section>
+</Pagina>
+
+<script>
+  const form = document.getElementById('ax-form');
+  if (form) {
+    const resultado = document.querySelector('[data-resultado]');
+    const boton = form.querySelector('[data-enviar]');
+    const waFallo = 'https://wa.me/573159679895?text=' +
+      encodeURIComponent('Hola, intenté escribirles por el formulario de la web.');
+
+    const reglas = {
+      name: (v) => (v.trim().length >= 2 ? '' : 'Escribe tu nombre.'),
+      lastname: (v) => (v.trim().length >= 2 ? '' : 'Escribe tu apellido.'),
+      email: (v) => (/^[^\s@]+@[^\s@]+\.[a-z]{2,}$/i.test(v.trim()) ? '' : 'Revisa tu correo electrónico.'),
+      phone: (v) => (v.replace(/\D/g, '').length >= 7 ? '' : 'Escribe un teléfono válido.'),
+      message: (v) => (v.trim().length >= 10 ? '' : 'Cuéntanos un poco más para poder ayudarte.'),
+      consent: (v, el) => (el.checked ? '' : 'Necesitamos tu autorización para tratar tus datos.'),
+    };
+
+    const pintarError = (campo, texto) => {
+      const hueco = form.querySelector(`[data-error][for-field="${campo}"]`);
+      const input = form.elements[campo];
+      if (hueco) hueco.textContent = texto;
+      if (input) {
+        input.setAttribute('aria-invalid', texto ? 'true' : 'false');
+        input.classList.toggle('ax-invalido', Boolean(texto));
+      }
+      return !texto;
+    };
+
+    // Validar al salir de cada campo, no mientras se escribe: corregir a
+    // alguien en mitad de una palabra es molesto.
+    Object.keys(reglas).forEach((campo) => {
+      const el = form.elements[campo];
+      if (!el) return;
+      el.addEventListener('blur', () => pintarError(campo, reglas[campo](el.value, el)));
+    });
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      let valido = true;
+      let primerFallo = null;
+      for (const campo of Object.keys(reglas)) {
+        const el = form.elements[campo];
+        const error = reglas[campo](el.value, el);
+        if (!pintarError(campo, error)) {
+          valido = false;
+          if (!primerFallo) primerFallo = el;
+        }
+      }
+      if (!valido) {
+        primerFallo.focus();
+        return;
+      }
+
+      const datos = Object.fromEntries(new FormData(form).entries());
+      boton.disabled = true;
+      boton.textContent = 'Enviando…';
+      resultado.hidden = true;
+
+      try {
+        const res = await fetch('/api/contact', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ ...datos, consent: true, source: location.href, utm: location.search }),
+        });
+        const cuerpo = await res.json().catch(() => ({}));
+        if (!res.ok) throw new Error(cuerpo.error || 'No pudimos enviar tu mensaje.');
+
+        form.hidden = true;
+        resultado.hidden = false;
+        resultado.className = 'ax-resultado ax-resultado--bien';
+        resultado.innerHTML =
+          '<p class="ax-resultado__titulo">Gracias por escribirnos</p>' +
+          '<p>Hemos recibido tu solicitud y te contactaremos. Si prefieres resolverlo ahora, escríbenos por WhatsApp.</p>' +
+          '<a class="ax-btn ax-btn--primario" href="' + waFallo + '">Hablar por WhatsApp</a>';
+      } catch (err) {
+        // Nunca mostrar éxito si el envío falló.
+        resultado.hidden = false;
+        resultado.className = 'ax-resultado ax-resultado--mal';
+        resultado.innerHTML =
+          '<p class="ax-resultado__titulo">No pudimos enviar tu mensaje</p>' +
+          '<p>El envío por correo todavía no está activo. Escríbenos por WhatsApp y te atendemos enseguida: es el canal por el que respondemos más rápido.</p>' +
+          '<a class="ax-btn ax-btn--primario" href="' + waFallo + '">Escribir por WhatsApp</a>';
+        boton.disabled = false;
+        boton.textContent = 'Enviar solicitud';
+      }
+    });
+  }
+</script>
+
+<style>
+  .ax-titulo-contacto { margin-block: var(--ax-e6) var(--ax-e4); max-width: 24ch; }
+  .ax-entrada { max-width: 60ch; color: var(--ax-texto-suave); font-size: var(--ax-txt-lg); }
+
+  .ax-contacto {
+    display: grid;
+    grid-template-columns: 1.15fr 0.85fr;
+    gap: var(--ax-e16);
+    align-items: start;
+  }
+  @media (max-width: 900px) {
+    .ax-contacto { grid-template-columns: 1fr; }
+  }
+
+  .ax-contacto__form,
+  .ax-contacto__datos {
+    background: var(--ax-blanco);
+    border: 1px solid var(--ax-borde);
+    padding: clamp(1.75rem, 3.4vw, 3rem);
+  }
+
+  .ax-form__nota { margin-top: var(--ax-e3); font-size: var(--ax-txt-sm); color: var(--ax-texto-tenue); }
+
+  form { display: grid; gap: var(--ax-e5, 1.25rem); margin-top: var(--ax-e8); }
+  .ax-form__fila { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--ax-e4); }
+  form label { display: grid; gap: var(--ax-e2); }
+  form label > span {
+    font-size: var(--ax-txt-xs);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ax-texto-tenue);
+  }
+  input,
+  textarea,
+  select {
+    padding: var(--ax-e3) var(--ax-e4);
+    border: 1px solid var(--ax-borde);
+    background: var(--ax-editorial-fondo);
+    border-radius: var(--ax-radio);
+    min-height: 48px;
+    color: var(--ax-texto);
+  }
+  textarea { min-height: 120px; resize: vertical; }
+  input:focus-visible,
+  textarea:focus-visible,
+  select:focus-visible { border-color: var(--ax-dorado); }
+  .ax-invalido { border-color: #A33; }
+
+  [data-error] {
+    font-style: normal;
+    font-size: var(--ax-txt-xs);
+    color: #A33;
+    min-height: 1em;
+  }
+  .ax-error-suelto { margin-top: calc(var(--ax-e2) * -1); }
+
+  .ax-form__consentimiento {
+    grid-template-columns: auto 1fr;
+    align-items: start;
+    gap: var(--ax-e3);
+  }
+  .ax-form__consentimiento input { min-height: auto; width: 20px; height: 20px; margin-top: 3px; }
+  .ax-form__consentimiento span { font-size: var(--ax-txt-sm); color: var(--ax-texto-suave); }
+  .ax-form__consentimiento a { text-decoration: underline; }
+
+  /* Trampa para bots: fuera de pantalla, no display:none, para que los
+     rellenadores automáticos la encuentren igual. */
+  .ax-miel {
+    position: absolute;
+    left: -9999px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+  }
+
+  .ax-resultado {
+    margin-top: var(--ax-e6);
+    padding: var(--ax-e6);
+    border-left: 3px solid var(--ax-dorado);
+    background: var(--ax-clinico-superficie);
+  }
+  .ax-resultado--mal { border-left-color: #A33; }
+  .ax-resultado__titulo { font-weight: var(--ax-peso-medio); margin-bottom: var(--ax-e3); }
+  .ax-resultado p { color: var(--ax-texto-suave); font-size: var(--ax-txt-sm); }
+  .ax-resultado .ax-btn { margin-top: var(--ax-e4); }
+
+  .ax-contacto__datos dl { margin-top: var(--ax-e6); }
+  .ax-contacto__datos dt { margin-top: var(--ax-e6); }
+  .ax-contacto__datos dd { margin: var(--ax-e2) 0 0; }
+  .ax-contacto__datos address { font-style: normal; }
+  .ax-contacto__datos a { border-bottom: 1px solid var(--ax-dorado); }
+  .ax-contacto__pendiente {
+    margin-top: var(--ax-e8);
+    padding-top: var(--ax-e4);
+    border-top: 1px solid var(--ax-borde);
+    font-size: var(--ax-txt-sm);
+    color: var(--ax-texto-tenue);
+  }
+
+  .ax-mapa-seccion { padding-block: var(--ax-seccion); background: var(--ax-editorial-fondo); }
+  .ax-mapa {
+    margin-top: var(--ax-e8);
+    width: 100%;
+    aspect-ratio: 21 / 9;
+    min-height: 320px;
+    background: var(--ax-clinico-superficie);
+  }
+  .ax-mapa iframe { width: 100%; height: 100%; border: 0; display: block; }
+  @media (max-width: 700px) {
+    .ax-mapa { aspect-ratio: 4 / 3; }
+  }
+  .ax-btn--suelto { margin-top: var(--ax-e8); }
+</style>

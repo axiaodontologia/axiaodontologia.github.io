@@ -1,0 +1,33 @@
+---
+/**
+ * Redirección de las URLs antiguas con hash.
+ *
+ * Por qué no es un 301: el fragmento de una URL (#/servicios/ortodoncia)
+ * NUNCA se envía al servidor. Para Firebase o cualquier hosting, esa
+ * petición es simplemente "/". Por eso una redirección de servidor no puede
+ * verla y la única solución correcta es resolverla en el cliente.
+ *
+ * Se ejecuta antes de pintar, de modo que el visitante no llega a ver la
+ * portada: aterriza directamente en la página que buscaba.
+ */
+---
+
+<script is:inline>
+  (function () {
+    var h = window.location.hash;
+    if (!h || h.charAt(1) !== '/') return;
+
+    var ruta = h.slice(1).split('?')[0].replace(/\/+$/, '');
+    if (!ruta || ruta === '/') {
+      history.replaceState(null, '', window.location.pathname);
+      return;
+    }
+
+    // El canvas usaba /politica-de-privacidad y las mismas rutas de
+    // servicios y blog, así que el camino se conserva tal cual.
+    var validas = /^\/(servicios|blog|nosotros|resultados|contacto|politica-de-privacidad)(\/[a-z0-9-]+)?$/;
+    if (validas.test(ruta)) {
+      window.location.replace(ruta + window.location.search);
+    }
+  })();
+</script>

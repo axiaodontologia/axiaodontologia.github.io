@@ -26,3 +26,7 @@ Thumbs.db
 
 # Buzón de originales sin optimizar (fotos y videos en bruto)
 _entrada/
+
+# Salida del build de Astro
+dist/
+.astro/

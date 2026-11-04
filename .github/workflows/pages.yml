@@ -27,13 +27,19 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Construir el sitio en _site/
-        run: node scripts/build-pages.js
+      - name: Instalar dependencias
+        run: npm ci
+
+      - name: Construir el sitio con Astro
+        run: npm run build
+
+      - name: Verificar metadatos y enlaces
+        run: node scripts/verificar.js
 
       - name: Subir el resultado como artefacto de Pages
         uses: actions/upload-pages-artifact@v3
         with:
-          path: _site
+          path: dist
 
   desplegar:
     needs: construir

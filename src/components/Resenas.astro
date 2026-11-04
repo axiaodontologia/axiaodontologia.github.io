@@ -1,0 +1,156 @@
+---
+/**
+ * Reseñas reales del perfil de Google.
+ *
+ * Si la integración está configurada muestra las reseñas tal como vienen
+ * de Google. Si no, muestra qué falta para activarla — pero nunca una
+ * reseña inventada ni una calificación de relleno.
+ */
+import { obtenerResenas } from '../data/resenas.js';
+
+const datos = await obtenerResenas();
+const estrellas = (n) => '★'.repeat(Math.round(n || 0)) + '☆'.repeat(5 - Math.round(n || 0));
+---
+
+<section class="ax-seccion ax-clinico" aria-labelledby="resenas">
+  <div class="ax-contenedor">
+    <div class="ax-resenas__cabecera">
+      <div>
+        <p class="ax-rotulo">Reseñas de Google</p>
+        <h2 id="resenas">Lo que dicen nuestros pacientes en Barranquilla</h2>
+      </div>
+
+      {datos.configurado && datos.calificacion && (
+        <div class="ax-resenas__nota">
+          <p class="ax-resenas__cifra">{datos.calificacion.toFixed(1)}</p>
+          <p class="ax-resenas__estrellas" aria-hidden="true">{estrellas(datos.calificacion)}</p>
+          <p class="ax-resenas__total">
+            {datos.total} {datos.total === 1 ? 'reseña' : 'reseñas'} en Google
+          </p>
+        </div>
+      )}
+    </div>
+
+    {datos.configurado && datos.resenas.length > 0 && (
+      <>
+        <ul class="ax-resenas">
+          {datos.resenas.map((r) => (
+            <li>
+              <p class="ax-resenas__estrellas" aria-label={`${r.estrellas} de 5 estrellas`}>
+                {estrellas(r.estrellas)}
+              </p>
+              <blockquote>{r.texto}</blockquote>
+              <p class="ax-resenas__autor">{r.autor}</p>
+              <p class="ax-resenas__fecha">{r.fecha}</p>
+            </li>
+          ))}
+        </ul>
+        {datos.url && (
+          <a href={datos.url} rel="noopener" class="ax-enlace-subrayado ax-resenas__enlace">
+            Ver el perfil en Google
+          </a>
+        )}
+      </>
+    )}
+
+    {!datos.configurado && (
+      <div class="ax-resenas__pendiente">
+        <p class="ax-resenas__pendiente-titulo">Integración lista, faltan dos datos</p>
+        <p>
+          La sección ya consulta la API de Google y publicará las reseñas
+          reales en cuanto reciba el identificador del perfil y una clave.
+          Mientras tanto no se muestra ninguna: inventar reseñas infringe las
+          directrices de Google y puede costar el perfil.
+        </p>
+        <ol class="ax-resenas__pasos">
+          <li>Crear o reclamar el Perfil de Empresa de Google de la clínica.</li>
+          <li>Obtener su <strong>Place ID</strong> desde ese perfil.</li>
+          <li>
+            Generar una clave de la <strong>Places API</strong> en Google Cloud
+            y cargarla como variable de entorno, nunca en el código.
+          </li>
+        </ol>
+      </div>
+    )}
+
+    {datos.error && (
+      <p class="ax-resenas__error">
+        No se pudieron traer las reseñas en la última compilación: {datos.error}
+      </p>
+    )}
+  </div>
+</section>
+
+<style>
+  .ax-resenas__cabecera {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: var(--ax-e8);
+    margin-bottom: var(--ax-e12);
+  }
+  .ax-resenas__cabecera h2 { margin-top: var(--ax-e6); max-width: 24ch; }
+
+  .ax-resenas__nota { text-align: right; }
+  .ax-resenas__cifra {
+    font-size: var(--ax-txt-2xl);
+    font-weight: var(--ax-peso-titulo);
+    line-height: 1;
+  }
+  .ax-resenas__estrellas { color: var(--ax-dorado); letter-spacing: 0.1em; }
+  .ax-resenas__total { font-size: var(--ax-txt-sm); color: var(--ax-texto-tenue); }
+
+  .ax-resenas {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: var(--ax-e8);
+  }
+  .ax-resenas li {
+    background: var(--ax-blanco);
+    border: 1px solid var(--ax-borde);
+    padding: var(--ax-e8);
+    display: flex;
+    flex-direction: column;
+  }
+  .ax-resenas blockquote {
+    margin: var(--ax-e4) 0 auto;
+    color: var(--ax-texto-suave);
+    font-size: var(--ax-txt-sm);
+    line-height: 1.8;
+  }
+  .ax-resenas__autor {
+    margin-top: var(--ax-e6);
+    font-size: var(--ax-txt-xs);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+  .ax-resenas__fecha { font-size: var(--ax-txt-xs); color: var(--ax-texto-tenue); }
+  .ax-resenas__enlace { margin-top: var(--ax-e8); }
+
+  .ax-resenas__pendiente {
+    padding: var(--ax-e8);
+    background: var(--ax-clinico-superficie);
+    border-left: 3px solid var(--ax-dorado);
+    max-width: 72ch;
+  }
+  .ax-resenas__pendiente-titulo {
+    font-weight: var(--ax-peso-medio);
+    margin-bottom: var(--ax-e3);
+  }
+  .ax-resenas__pendiente p { color: var(--ax-texto-suave); font-size: var(--ax-txt-sm); }
+  .ax-resenas__pasos {
+    margin-top: var(--ax-e4);
+    display: grid;
+    gap: var(--ax-e2);
+    list-style: decimal;
+    padding-left: var(--ax-e6);
+    font-size: var(--ax-txt-sm);
+    color: var(--ax-texto-suave);
+  }
+  .ax-resenas__error {
+    margin-top: var(--ax-e4);
+    font-size: var(--ax-txt-sm);
+    color: var(--ax-texto-tenue);
+  }
+</style>

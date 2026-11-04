@@ -17,6 +17,18 @@
       ],
       "port": 4322,
       "url": "http://localhost:4322"
+    },
+    {
+      "name": "axia-astro",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": [
+        "astro",
+        "preview",
+        "--port",
+        "4323"
+      ],
+      "port": 4323,
+      "url": "http://localhost:4323"
     }
   ]
 }

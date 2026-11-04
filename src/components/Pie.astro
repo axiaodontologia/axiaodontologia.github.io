@@ -1,0 +1,133 @@
+---
+/**
+ * Pie global. El NAP sale de la configuración, nunca escrito a mano:
+ * Google penaliza que nombre, dirección y teléfono varíen entre páginas.
+ */
+import { SITIO, wa } from '../config/sitio.js';
+import { SERVICIOS } from '../data/servicios.js';
+---
+
+<footer class="ax-pie ax-gris">
+  <div class="ax-contenedor ax-pie__rejilla">
+    <div>
+      <img
+        src="/assets/logos/axia-odontologia-logo-blanco.webp"
+        alt={SITIO.nombre}
+        width="132"
+        height="132"
+        loading="lazy"
+        class="ax-pie__logo"
+      />
+      <p class="ax-pie__nota">
+        Odontología integral en el norte de Barranquilla. Diagnóstico completo
+        antes de tratar y el plan por escrito desde la primera cita.
+      </p>
+    </div>
+
+    <nav aria-labelledby="pie-servicios">
+      <p class="ax-rotulo" id="pie-servicios">Servicios</p>
+      <ul>
+        {SERVICIOS.map((s) => (
+          <li><a href={`/servicios/${s.slug}`}>{s.nav}</a></li>
+        ))}
+      </ul>
+    </nav>
+
+    <nav aria-labelledby="pie-clinica">
+      <p class="ax-rotulo" id="pie-clinica">Clínica</p>
+      <ul>
+        <li><a href="/nosotros">Nosotros</a></li>
+        <li><a href="/resultados">Resultados</a></li>
+        <li><a href="/blog">Blog</a></li>
+        <li><a href="/contacto">Contacto</a></li>
+        <li><a href="/politica-de-privacidad">Política de privacidad</a></li>
+      </ul>
+    </nav>
+
+    <div>
+      <p class="ax-rotulo">Contacto</p>
+      <ul>
+        <li>
+          <a href={wa('Hola, quiero agendar una cita en Axia Odontología.')} data-track="whatsapp_click" data-origin="pie">
+            WhatsApp +57 315 967 9895
+          </a>
+        </li>
+        <li><a href={`mailto:${SITIO.email}`}>{SITIO.email}</a></li>
+        <li>
+          <address>
+            {SITIO.direccion.calle}<br />
+            {SITIO.direccion.ciudad}, {SITIO.direccion.region}
+          </address>
+        </li>
+        <li><a href={SITIO.redes.instagram} rel="noopener">Instagram</a></li>
+        <li><a href={SITIO.redes.tiktok} rel="noopener">TikTok</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="ax-contenedor ax-pie__legal">
+    <p>© {new Date().getFullYear()} {SITIO.nombre}. Todos los derechos reservados.</p>
+    <p>Atención con cita previa.</p>
+  </div>
+</footer>
+
+<style>
+  .ax-pie {
+    padding-block: var(--ax-e24) var(--ax-e8);
+  }
+
+  .ax-pie__rejilla {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+    gap: var(--ax-e12);
+  }
+
+  .ax-pie__logo {
+    width: 118px;
+    height: auto;
+  }
+
+  .ax-pie__nota {
+    margin-top: var(--ax-e4);
+    max-width: 34ch;
+    font-size: var(--ax-txt-sm);
+    color: var(--ax-gris-texto-tenue);
+  }
+
+  .ax-pie ul {
+    margin-top: var(--ax-e4);
+    display: grid;
+    gap: var(--ax-e3);
+    font-size: var(--ax-txt-sm);
+  }
+
+  .ax-pie a {
+    color: var(--ax-gris-texto-tenue);
+    /* objetivo táctil cómodo */
+    display: inline-flex;
+    align-items: center;
+    min-height: 32px;
+    transition: color var(--ax-rapido) var(--ax-curva);
+  }
+
+  .ax-pie a:hover {
+    color: var(--ax-gris-acento);
+  }
+
+  .ax-pie address {
+    font-style: normal;
+    color: var(--ax-gris-texto-tenue);
+  }
+
+  .ax-pie__legal {
+    margin-top: var(--ax-e16);
+    padding-top: var(--ax-e6);
+    border-top: 1px solid var(--ax-gris-borde);
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: var(--ax-e3);
+    font-size: var(--ax-txt-xs);
+    color: var(--ax-gris-texto-tenue);
+  }
+</style>

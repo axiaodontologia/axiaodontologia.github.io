@@ -1,0 +1,291 @@
+/**
+ * Estilos base. Todo valor sale de tokens.css; aquí no se inventa color.
+ */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--ax-editorial-fondo);
+  color: var(--ax-texto);
+  font-family: var(--ax-fuente);
+  font-weight: var(--ax-peso-cuerpo);
+  font-size: var(--ax-txt-base);
+  line-height: var(--ax-interlinea-cuerpo);
+  -webkit-font-smoothing: antialiased;
+  text-wrap: pretty;
+}
+
+h1,
+h2,
+h3,
+h4,
+p,
+ul,
+ol,
+figure,
+blockquote {
+  margin: 0;
+  padding: 0;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-weight: var(--ax-peso-titulo);
+  line-height: var(--ax-interlinea-titulo);
+  letter-spacing: var(--ax-tracking-titulo);
+  text-wrap: balance;
+}
+
+h1 { font-size: var(--ax-txt-3xl); }
+h2 { font-size: var(--ax-txt-2xl); }
+h3 { font-size: var(--ax-txt-lg); }
+
+ul,
+ol {
+  list-style: none;
+}
+
+img,
+video {
+  max-width: 100%;
+  display: block;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  font-family: inherit;
+}
+
+/* Foco siempre visible: es el único modo de navegar con teclado. */
+:focus-visible {
+  outline: 2px solid var(--ax-foco);
+  outline-offset: 3px;
+  border-radius: var(--ax-radio);
+}
+
+::selection {
+  background: var(--ax-beige);
+  color: var(--ax-negro);
+}
+
+input,
+textarea,
+select {
+  font-family: inherit;
+  font-size: 16px; /* por debajo de 16px iOS hace zoom al enfocar */
+  font-weight: var(--ax-peso-cuerpo);
+}
+
+/* Salto al contenido: invisible hasta que se tabula. */
+.ax-saltar {
+  position: absolute;
+  left: -9999px;
+  top: var(--ax-e2);
+  z-index: 200;
+  background: var(--ax-negro);
+  color: var(--ax-blanco);
+  padding: var(--ax-e3) var(--ax-e4);
+}
+
+.ax-saltar:focus {
+  left: var(--ax-e2);
+}
+
+/* Contenedor estándar */
+.ax-contenedor {
+  max-width: var(--ax-ancho);
+  margin-inline: auto;
+  padding-inline: var(--ax-gutter);
+}
+
+/* «El eje»: la hairline dorada vertical que antecede cada rótulo de
+   sección. Es el elemento firma de la marca, un guiño a Axia / axis. */
+.ax-rotulo {
+  position: relative;
+  padding-left: 20px;
+  font-size: var(--ax-txt-xs);
+  letter-spacing: var(--ax-tracking-rotulo);
+  text-transform: uppercase;
+  color: var(--ax-texto-tenue);
+}
+
+.ax-rotulo::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 1px;
+  height: clamp(20px, 2.4vw, 30px);
+  background: var(--ax-dorado);
+}
+
+/* Sobre fondo oscuro el rótulo usa el dorado claro, que sí contrasta. */
+.ax-oscuro .ax-rotulo {
+  color: var(--ax-tech-acento);
+}
+
+/* ---------------------------------------------------------------
+   BOTONES
+   Las combinaciones están fijadas por los contrastes medidos:
+   negro sobre beige 11,52:1 · blanco sobre carbón 12,63:1.
+   Altura mínima de 48px para que el objetivo táctil sea cómodo.
+   --------------------------------------------------------------- */
+.ax-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 48px;
+  padding: var(--ax-e4) var(--ax-e8);
+  font-size: var(--ax-txt-sm);
+  font-weight: var(--ax-peso-medio);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  border-radius: var(--ax-radio);
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: background var(--ax-medio) var(--ax-curva),
+              color var(--ax-medio) var(--ax-curva),
+              border-color var(--ax-medio) var(--ax-curva);
+}
+
+.ax-btn--primario {
+  background: var(--ax-btn-primario-fondo);
+  color: var(--ax-btn-primario-texto);
+}
+
+.ax-btn--primario:hover {
+  background: var(--ax-btn-primario-hover-fondo);
+  color: var(--ax-btn-primario-hover-texto);
+}
+
+.ax-btn--oscuro {
+  background: var(--ax-btn-oscuro-fondo);
+  color: var(--ax-btn-oscuro-texto);
+}
+
+.ax-btn--oscuro:hover {
+  background: var(--ax-dorado);
+  color: var(--ax-negro);
+}
+
+/* Contorno: sobre fondo claro */
+.ax-btn--contorno {
+  border-color: var(--ax-texto);
+  color: var(--ax-texto);
+}
+
+.ax-btn--contorno:hover {
+  background: var(--ax-texto);
+  color: var(--ax-blanco);
+}
+
+/* Contorno sobre fondo oscuro */
+.ax-oscuro .ax-btn--contorno {
+  border-color: rgba(255, 255, 255, 0.45);
+  color: var(--ax-blanco);
+}
+
+.ax-oscuro .ax-btn--contorno:hover {
+  background: var(--ax-blanco);
+  color: var(--ax-negro);
+}
+
+.ax-botonera {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--ax-e3);
+}
+
+/* Secciones y ambientes */
+.ax-seccion {
+  padding-block: var(--ax-seccion);
+}
+
+.ax-oscuro {
+  background: var(--ax-tech-fondo);
+  color: var(--ax-texto-inverso);
+}
+
+.ax-clinico {
+  background: var(--ax-clinico-fondo);
+}
+
+.ax-editorial {
+  background: var(--ax-editorial-fondo);
+}
+
+/* ---------------------------------------------------------------
+   AMBIENTE DORADO
+   El dorado de marca como fondo de sección. Todo el texto va en
+   negro: es la única combinación que supera el mínimo de contraste
+   (6,36:1). El blanco sobre dorado se queda en 3,30:1 y no se usa.
+   --------------------------------------------------------------- */
+.ax-dorado {
+  background: var(--ax-dorado-fondo);
+  color: var(--ax-dorado-texto);
+}
+
+.ax-dorado .ax-rotulo {
+  color: var(--ax-dorado-texto-tenue);
+}
+
+.ax-dorado .ax-rotulo::before {
+  background: var(--ax-negro);
+}
+
+/* Sobre dorado, el botón principal se invierte a negro para destacar. */
+.ax-dorado .ax-btn--primario {
+  background: var(--ax-negro);
+  color: var(--ax-dorado);
+}
+
+.ax-dorado .ax-btn--primario:hover {
+  background: var(--ax-blanco);
+  color: var(--ax-negro);
+}
+
+.ax-dorado .ax-btn--contorno {
+  border-color: var(--ax-negro);
+  color: var(--ax-negro);
+}
+
+.ax-dorado .ax-btn--contorno:hover {
+  background: var(--ax-negro);
+  color: var(--ax-dorado);
+}
+
+/* ---------------------------------------------------------------
+   AMBIENTE GRIS
+   El gris corporativo como superficie. El texto va en blanco
+   (12,63:1) y el acento en dorado claro (5,63:1): el dorado normal
+   solo llega a 3,82:1 sobre este fondo y no se usa para texto.
+   --------------------------------------------------------------- */
+.ax-gris {
+  background: var(--ax-gris-fondo);
+  color: var(--ax-gris-texto);
+}
+
+.ax-gris .ax-rotulo {
+  color: var(--ax-gris-acento);
+}
+
+.ax-gris .ax-rotulo::before {
+  background: var(--ax-gris-acento);
+}

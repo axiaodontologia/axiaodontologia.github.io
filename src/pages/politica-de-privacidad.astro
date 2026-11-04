@@ -1,0 +1,76 @@
+---
+/**
+ * Política de privacidad.
+ *
+ * NO se redacta texto jurídico nuevo. Se conserva la estructura que debe
+ * tener y se marca como pendiente el texto íntegro, que debe venir de la
+ * clínica o de su asesor legal. Publicar una política inventada sería
+ * peor que no tenerla.
+ */
+import Pagina from '../layouts/Pagina.astro';
+import { META } from '../data/meta.js';
+import { SITIO } from '../config/sitio.js';
+
+const m = META.privacidad;
+
+const ESTRUCTURA = [
+  'Responsable del tratamiento y datos de contacto',
+  'Finalidades del tratamiento de los datos',
+  'Derechos del titular (Ley 1581 de 2012 y Decreto 1377 de 2013)',
+  'Canal de atención de PQRS',
+  'Procedimiento para ejercer los derechos',
+  'Vigencia de la política y fecha de última actualización',
+];
+---
+
+<Pagina titulo={m.title} descripcion={m.desc} ruta="/politica-de-privacidad">
+  <section class="ax-seccion ax-editorial">
+    <div class="ax-contenedor" style="max-width: 760px">
+      <h1>Política de privacidad y tratamiento de datos personales</h1>
+
+      <div class="ax-aviso-pendiente">
+        <p>
+          <strong>Pendiente:</strong> falta incorporar el texto íntegro de la
+          política de tratamiento de datos personales de Axia Odontología. No
+          se ha redactado texto jurídico nuevo para esta página: debe
+          proporcionarlo la clínica o su asesor legal.
+        </p>
+      </div>
+
+      <h2>Estructura que debe conservar</h2>
+      <ol class="ax-estructura">
+        {ESTRUCTURA.map((punto, i) => (
+          <li><span>{String(i + 1).padStart(2, '0')}</span>{punto}</li>
+        ))}
+      </ol>
+
+      <h2>Mientras tanto</h2>
+      <p>
+        Para cualquier solicitud relacionada con tus datos personales, puedes
+        escribirnos a <a href={`mailto:${SITIO.email}`}>{SITIO.email}</a> y
+        atenderemos tu petición.
+      </p>
+    </div>
+  </section>
+</Pagina>
+
+<style>
+  .ax-aviso-pendiente {
+    margin-block: var(--ax-e8);
+    padding: var(--ax-e6);
+    background: var(--ax-clinico-superficie);
+    border-left: 3px solid var(--ax-dorado);
+  }
+  h2 { margin-top: var(--ax-e12); font-size: var(--ax-txt-lg); }
+  .ax-estructura { margin-top: var(--ax-e6); display: grid; gap: var(--ax-e3); }
+  .ax-estructura li {
+    display: grid;
+    grid-template-columns: 2.5rem 1fr;
+    padding-block: var(--ax-e3);
+    border-top: 1px solid var(--ax-borde);
+    color: var(--ax-texto-suave);
+  }
+  .ax-estructura span { color: var(--ax-dorado); }
+  p { margin-top: var(--ax-e4); color: var(--ax-texto-suave); }
+  p a { border-bottom: 1px solid var(--ax-dorado); }
+</style>

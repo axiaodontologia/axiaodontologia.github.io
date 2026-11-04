@@ -1,0 +1,147 @@
+---
+/**
+ * Video que se reproduce solo al entrar en pantalla.
+ *
+ * Los navegadores bloquean el autoplay con sonido desde 2018: solo lo
+ * permiten en silencio. Por eso arranca muteado y se ofrece un botón para
+ * activar el audio, que es la única manera de que el video se reproduzca
+ * automáticamente sin que el navegador lo detenga.
+ *
+ * Además solo empieza cuando el video está a la vista, no al cargar la
+ * página: así no se gastan megas del paciente en un video que quizá nunca
+ * mire, ni se compite con el contenido principal por el ancho de banda.
+ */
+const { src, poster, titulo, duracion = null } = Astro.props;
+---
+
+<div class="ax-video" data-video-auto>
+  <video
+    src={src}
+    poster={poster}
+    muted
+    loop
+    playsinline
+    preload="none"
+    aria-label={titulo}></video>
+
+  <button type="button" class="ax-video__audio" data-audio aria-pressed="false">
+    <span class="ax-video__icono" aria-hidden="true">
+      <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8">
+        <path d="M11 5 6 9H3v6h3l5 4V5z" />
+        <line data-tachado x1="17" y1="9" x2="22" y2="15" />
+        <line data-tachado x1="22" y1="9" x2="17" y2="15" />
+        <path data-ondas hidden d="M16 9a4 4 0 0 1 0 6" />
+      </svg>
+    </span>
+    <span data-etiqueta>Activar sonido</span>
+  </button>
+
+  {duracion && <p class="ax-video__duracion">{duracion}</p>}
+</div>
+
+<script>
+  // Arranca cada video cuando entra en pantalla y lo pausa al salir.
+  const contenedores = document.querySelectorAll('[data-video-auto]');
+  const sinMovimiento = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  contenedores.forEach((caja) => {
+    const video = caja.querySelector('video');
+    const boton = caja.querySelector('[data-audio]');
+    const etiqueta = boton.querySelector('[data-etiqueta]');
+    const tachado = boton.querySelectorAll('[data-tachado]');
+    const ondas = boton.querySelector('[data-ondas]');
+
+    // Quien pide menos movimiento no recibe un video arrancando solo.
+    if (!sinMovimiento && 'IntersectionObserver' in window) {
+      const io = new IntersectionObserver(
+        (entradas) => {
+          entradas.forEach((e) => {
+            if (e.isIntersecting) {
+              video.play().catch(() => {});
+            } else {
+              video.pause();
+            }
+          });
+        },
+        { threshold: 0.4 }
+      );
+      io.observe(caja);
+    }
+
+    boton.addEventListener('click', () => {
+      video.muted = !video.muted;
+      const activo = !video.muted;
+      boton.setAttribute('aria-pressed', String(activo));
+      etiqueta.textContent = activo ? 'Silenciar' : 'Activar sonido';
+      tachado.forEach((l) => (l.hidden = activo));
+      ondas.hidden = !activo;
+      // Al activar el sonido se muestran los controles: a partir de ahí
+      // el visitante manda sobre la reproducción.
+      video.controls = activo;
+      if (activo) video.play().catch(() => {});
+    });
+  });
+</script>
+
+<style>
+  .ax-video {
+    position: relative;
+    max-width: 420px;
+    width: 100%;
+    margin-inline: auto;
+    aspect-ratio: 9 / 16;
+    background: var(--ax-negro);
+    border-radius: var(--ax-radio-grande);
+    overflow: hidden;
+    box-shadow: var(--ax-sombra-elevada);
+  }
+
+  .ax-video video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .ax-video__audio {
+    position: absolute;
+    left: var(--ax-e4);
+    bottom: var(--ax-e4);
+    z-index: 2;
+    display: inline-flex;
+    align-items: center;
+    gap: var(--ax-e2);
+    min-height: 44px;
+    padding: var(--ax-e2) var(--ax-e4);
+    background: rgba(0, 0, 0, 0.62);
+    backdrop-filter: blur(8px);
+    color: var(--ax-blanco);
+    border: 1px solid rgba(255, 255, 255, 0.28);
+    border-radius: 999px;
+    font-size: var(--ax-txt-xs);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background var(--ax-rapido) var(--ax-curva),
+                border-color var(--ax-rapido) var(--ax-curva);
+  }
+
+  .ax-video__audio:hover {
+    background: var(--ax-dorado);
+    color: var(--ax-negro);
+    border-color: var(--ax-dorado);
+  }
+
+  .ax-video__icono { display: flex; }
+
+  .ax-video__duracion {
+    position: absolute;
+    right: var(--ax-e4);
+    bottom: var(--ax-e6);
+    z-index: 2;
+    font-size: var(--ax-txt-xs);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.82);
+  }
+</style>

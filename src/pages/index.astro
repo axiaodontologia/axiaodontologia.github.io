@@ -1,0 +1,521 @@
+---
+/**
+ * Portada.
+ *
+ * Mantiene la estructura del diseño original aprobado: hero, diferenciales,
+ * tratamientos, 3D, la clínica, proceso, resultados, experiencia de paciente,
+ * reseñas, blog, preguntas frecuentes y cierre.
+ *
+ * Único cambio respecto al original: la sección de tratamientos usa tarjetas
+ * con fotografía en lugar de la lista con iconos.
+ */
+import Pagina from '../layouts/Pagina.astro';
+import { SERVICIOS } from '../data/servicios.js';
+import { ARTICULOS } from '../data/articulos.js';
+import { META } from '../data/meta.js';
+import { SECCION_3D, SECCION_CLINICA, SECCION_RESULTADOS, SECCION_RESENAS, FAQS } from '../data/portada.js';
+import { SITIO, wa } from '../config/sitio.js';
+import VideoAuto from '../components/VideoAuto.astro';
+import Resenas from '../components/Resenas.astro';
+
+const m = META.home;
+const destacados = ARTICULOS.slice(0, 3);
+const waPrincipal = wa('Hola, quiero agendar una cita en Axia Odontología.');
+
+const pasos = [
+  { n: '01', t: 'Escribes por WhatsApp', d: 'Nos cuentas qué te pasa o qué quieres mejorar y coordinamos día y hora.' },
+  { n: '02', t: 'Consulta de diagnóstico', d: 'Revisión completa, registros e imágenes. Sin diagnósticos hechos a ojo.' },
+  { n: '03', t: 'Plan y presupuesto', d: 'Te mostramos opciones, tiempos y costos por escrito antes de tocar nada.' },
+  { n: '04', t: 'Tratamiento y control', d: 'Ejecutamos por etapas y seguimos contigo en los controles posteriores.' },
+];
+
+const diferenciales = [
+  { t: 'Atención personalizada', d: 'Un plan por paciente, no un paquete estándar.' },
+  { t: 'Cinco especialistas', d: 'Cada tratamiento lo lleva quien se formó en él.' },
+  { t: 'Tecnología de diagnóstico', d: 'Planificamos sobre imágenes, no sobre supuestos.' },
+  { t: 'Norte de Barranquilla', d: 'Cra. 50 #82-235, con cita previa por WhatsApp.' },
+];
+
+// Las preguntas de la portada alimentan el schema FAQPage.
+const schema = [
+  {
+    '@type': 'FAQPage',
+    mainEntity: FAQS.map((f) => ({
+      '@type': 'Question',
+      name: f.q,
+      acceptedAnswer: { '@type': 'Answer', text: f.a },
+    })),
+  },
+];
+---
+
+<Pagina titulo={m.title} descripcion={m.desc} ruta="/" schema={schema}>
+  <!-- HERO -->
+  <section class="ax-hero ax-oscuro" aria-labelledby="hero-titulo">
+    <div class="ax-hero__fondo" aria-hidden="true">
+      <img
+        src="/assets/images/hero/odontologia-barranquilla-axia-poster.webp"
+        alt=""
+        width="1200"
+        height="800"
+        fetchpriority="high"
+        decoding="async"
+      />
+      <video src="/assets/video/axia-hero-bg.mp4" autoplay muted loop playsinline preload="none" tabindex="-1"></video>
+      <div class="ax-hero__velo"></div>
+    </div>
+
+    <div class="ax-contenedor ax-hero__fila">
+      <div class="ax-hero__texto">
+        <p class="ax-rotulo">Clínica odontológica en Barranquilla</p>
+        <h1 id="hero-titulo">Odontología integral en Barranquilla</h1>
+        <p class="ax-hero__bajada">
+          Ortodoncia, implantes dentales y diseño de sonrisa en el norte de
+          Barranquilla. Cinco profesionales, diagnóstico completo antes de
+          tratar y el plan por escrito desde la primera cita.
+        </p>
+        <div class="ax-botonera">
+          <a href={waPrincipal} class="ax-btn ax-btn--primario" data-track="whatsapp_click" data-origin="hero">Agendar por WhatsApp</a>
+          <a href="/contacto" class="ax-btn ax-btn--contorno" data-track="appointment_click" data-origin="hero">Dejar mis datos</a>
+        </div>
+        <p class="ax-hero__nap">{SITIO.direccion.calle}, {SITIO.direccion.ciudad} · Atención con cita previa</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- DIFERENCIALES -->
+  <section class="ax-editorial" aria-label="Por qué elegir Axia">
+    <div class="ax-contenedor">
+      <ul class="ax-diferenciales">
+        {diferenciales.map((d) => (
+          <li>
+            <p class="ax-rotulo">{d.t}</p>
+            <p class="ax-diferenciales__texto">{d.d}</p>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <!-- TRATAMIENTOS (la sección nueva, con fotografías) -->
+  <section class="ax-seccion ax-clinico" aria-labelledby="home-serv">
+    <div class="ax-contenedor">
+      <p class="ax-rotulo">Tratamientos</p>
+      <h2 id="home-serv" class="ax-titulo-seccion">Todo lo que tu boca necesita, en un solo lugar</h2>
+      <ul class="ax-rejilla-servicios">
+        {SERVICIOS.map((s) => (
+          <li class="ax-tarjeta">
+            <a href={`/servicios/${s.slug}`}>
+              <div class="ax-tarjeta__img">
+                <img src={s.imgSrc} alt={`${s.nav} en Axia Odontología, Barranquilla`} width="1200" height="800" loading="lazy" decoding="async" />
+              </div>
+              <p class="ax-tarjeta__num">{s.num}</p>
+              <h3 class="ax-tarjeta__titulo">{s.nav}</h3>
+              <p class="ax-tarjeta__texto">{s.card}</p>
+            </a>
+          </li>
+        ))}
+      </ul>
+      <a href="/servicios" class="ax-btn ax-btn--contorno ax-btn--suelto">Ver todos los servicios</a>
+    </div>
+  </section>
+
+  <!-- DIAGNÓSTICO 3D -->
+  <section class="ax-seccion ax-oscuro" aria-labelledby="home-3d">
+    <div class="ax-contenedor ax-split">
+      <div>
+        <p class="ax-rotulo">Diagnóstico visual</p>
+        <h2 id="home-3d" class="ax-titulo-seccion">{SECCION_3D.titulo}</h2>
+        {SECCION_3D.parrafos.map((p) => <p class="ax-texto-inverso">{p}</p>)}
+        <p class="ax-nota-inversa">Gíralo con el cursor o con el dedo.</p>
+        <a href={waPrincipal} class="ax-btn ax-btn--primario ax-btn--suelto" data-track="whatsapp_click" data-origin="home_3d">
+          Agendar mi valoración
+        </a>
+      </div>
+      <div class="ax-visor3d">
+        <iframe
+          title="Modelo 3D de dientes — Axia Odontología"
+          src="https://sketchfab.com/models/eff3d27111cf47ed9cc83c2ebff0e618/embed?autostart=0&preload=0&transparent=1&ui_infos=0&ui_hint=0&ui_watermark=0"
+          loading="lazy"
+          allow="autoplay; fullscreen; xr-spatial-tracking"
+          allowfullscreen></iframe>
+      </div>
+    </div>
+  </section>
+
+  <!-- LA CLÍNICA -->
+  <section class="ax-seccion ax-editorial" aria-labelledby="home-about">
+    <div class="ax-contenedor ax-split">
+      <div class="ax-split__img">
+        <img
+          src="/assets/images/clinic/axia-sala-atencion-barranquilla.webp"
+          alt="Sala de atención de Axia Odontología en Barranquilla"
+          width="1100"
+          height="1100"
+          loading="lazy"
+          decoding="async"
+        />
+      </div>
+      <div>
+        <p class="ax-rotulo">La clínica</p>
+        <h2 id="home-about" class="ax-titulo-seccion">{SECCION_CLINICA.titulo}</h2>
+        {SECCION_CLINICA.parrafos.map((p) => <p class="ax-texto-cuerpo">{p}</p>)}
+        <a href="/nosotros" class="ax-enlace-subrayado ax-btn--suelto">Conocer a Axia</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- CÓMO TRABAJAMOS -->
+  <section class="ax-seccion ax-clinico" aria-labelledby="home-proc">
+    <div class="ax-contenedor">
+      <p class="ax-rotulo">Cómo trabajamos</p>
+      <h2 id="home-proc" class="ax-titulo-seccion">De la primera consulta al alta, en cuatro pasos</h2>
+      <ol class="ax-pasos">
+        {pasos.map((p) => (
+          <li>
+            <p class="ax-pasos__num">{p.n}</p>
+            <h3>{p.t}</h3>
+            <p class="ax-pasos__texto">{p.d}</p>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  <!-- RESULTADOS -->
+  <section class="ax-seccion ax-oscuro" aria-labelledby="home-res">
+    <div class="ax-contenedor">
+      <div class="ax-cabecera-seccion">
+        <div>
+          <p class="ax-rotulo">Resultados</p>
+          <h2 id="home-res" class="ax-titulo-seccion">{SECCION_RESULTADOS.titulo}</h2>
+        </div>
+        <a href="/resultados" class="ax-enlace-subrayado ax-enlace-subrayado--claro">Ver la galería de casos</a>
+      </div>
+      <ul class="ax-casos">
+        {['Diseño de sonrisa', 'Implantes dentales', 'Ortodoncia'].map((t) => (
+          <li>
+            <div class="ax-casos__hueco" aria-hidden="true"><span>Fotografía pendiente</span></div>
+            <p class="ax-casos__pie">{t}</p>
+          </li>
+        ))}
+      </ul>
+      <p class="ax-nota-inversa">
+        Cada fotografía se publica con autorización escrita del paciente. Los
+        resultados varían según el caso, el diagnóstico y el cuidado posterior.
+      </p>
+    </div>
+  </section>
+
+  <!-- EXPERIENCIA DE PACIENTE -->
+  <section class="ax-seccion ax-editorial" aria-labelledby="home-exp">
+    <div class="ax-contenedor ax-split ax-split--video">
+      <VideoAuto
+        src="/assets/video/testimonio-paciente-axia.mp4"
+        poster="/assets/images/experiencia/poster-testimonio-paciente.webp"
+        titulo="Testimonio de una paciente de Axia Odontología"
+        duracion="1:35"
+      />
+      <div>
+        <p class="ax-rotulo">La experiencia de nuestros pacientes</p>
+        <h2 id="home-exp" class="ax-titulo-seccion">No te contamos cómo es. Te lo cuenta una paciente</h2>
+        <p class="ax-texto-cuerpo">
+          Una paciente atendida en nuestra sede de Barranquilla responde, sin
+          guion, las tres preguntas que más nos hacen quienes todavía dudan en
+          pedir su primera cita.
+        </p>
+        <ul class="ax-preguntas-video">
+          <li>¿Cuáles eran sus expectativas antes de llegar a Axia?</li>
+          <li>¿Qué la motivó a quedarse?</li>
+          <li>¿Qué le recomendaría a alguien que tiene dudas de venir?</li>
+        </ul>
+        <div class="ax-botonera">
+          <a href={waPrincipal} class="ax-btn ax-btn--primario" data-track="whatsapp_click" data-origin="home_experiencia">Agendar mi valoración</a>
+          <a href="/nosotros" class="ax-btn ax-btn--contorno">Conocer la clínica</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- RESEÑAS -->
+  <Resenas />
+
+  <!-- BLOG -->
+  <section class="ax-seccion ax-editorial" aria-labelledby="home-blog">
+    <div class="ax-contenedor">
+      <div class="ax-cabecera-seccion">
+        <div>
+          <p class="ax-rotulo">Centro de recursos</p>
+          <h2 id="home-blog" class="ax-titulo-seccion">Respuestas a lo que más nos preguntan</h2>
+        </div>
+        <a href="/blog" class="ax-enlace-subrayado">Ir al blog</a>
+      </div>
+      <ul class="ax-lista-blog">
+        {destacados.map((a) => (
+          <li>
+            <a href={`/blog/${a.slug}`}>
+              <div class="ax-lista-blog__img">
+                <img src={a.imgSrc} alt={a.h1} width="1200" height="800" loading="lazy" decoding="async" />
+              </div>
+              <p class="ax-lista-blog__cluster">{a.cluster}</p>
+              <h3>{a.h1}</h3>
+              <p class="ax-lista-blog__teaser">{a.teaser}</p>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <!-- PREGUNTAS FRECUENTES -->
+  <section class="ax-seccion ax-clinico" aria-labelledby="home-faq">
+    <div class="ax-contenedor ax-split ax-split--faq">
+      <div>
+        <p class="ax-rotulo">Preguntas frecuentes</p>
+        <h2 id="home-faq" class="ax-titulo-seccion">Dudas frecuentes sobre nuestra clínica en Barranquilla</h2>
+        <p class="ax-texto-cuerpo">
+          Si tu pregunta no está aquí, escríbenos por WhatsApp y te respondemos
+          en horario de atención.
+        </p>
+      </div>
+      <div class="ax-faq">
+        {FAQS.map((f) => (
+          <details>
+            <summary>{f.q}</summary>
+            <p>{f.a}</p>
+          </details>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- CIERRE -->
+  <section class="ax-seccion ax-dorado" aria-labelledby="home-cta">
+    <div class="ax-contenedor ax-centrado">
+      <h2 id="home-cta">Empecemos por una consulta de diagnóstico</h2>
+      <p class="ax-cta__texto">
+        Cuéntanos qué te preocupa. Revisamos, te explicamos qué está pasando y
+        decidimos juntos el siguiente paso.
+      </p>
+      <div class="ax-botonera ax-botonera--centro">
+        <a href={waPrincipal} class="ax-btn ax-btn--primario" data-track="whatsapp_click" data-origin="home_cta">Consultar por WhatsApp</a>
+        <a href="/contacto" class="ax-btn ax-btn--contorno">Agendar mi cita</a>
+      </div>
+    </div>
+  </section>
+</Pagina>
+
+<style>
+  /* HERO — el bloque de texto se alinea a la izquierda del contenedor,
+     no al centro de la pantalla. */
+  .ax-hero {
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    min-height: clamp(560px, 86vh, 860px);
+  }
+  .ax-hero__fondo { position: absolute; inset: 0; }
+  .ax-hero__fondo img,
+  .ax-hero__fondo video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .ax-hero__velo {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(100deg, rgba(0, 0, 0, 0.9) 0%, rgba(0, 0, 0, 0.74) 44%, rgba(0, 0, 0, 0.34) 100%);
+  }
+  .ax-hero__fila {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    padding-block: var(--ax-seccion);
+  }
+  .ax-hero__texto { max-width: 46ch; }
+  .ax-hero h1 { margin-block: var(--ax-e6); color: var(--ax-blanco); }
+  .ax-hero__bajada {
+    font-size: var(--ax-txt-lg);
+    color: var(--ax-texto-inverso-tenue);
+    margin-bottom: var(--ax-e8);
+  }
+  .ax-hero__nap {
+    margin-top: var(--ax-e6);
+    font-size: var(--ax-txt-sm);
+    color: var(--ax-texto-inverso-tenue);
+  }
+
+  .ax-titulo-seccion { margin-block: var(--ax-e6) var(--ax-e8); max-width: 24ch; }
+
+  .ax-cabecera-seccion {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: var(--ax-e6);
+    margin-bottom: var(--ax-e12);
+  }
+  .ax-cabecera-seccion .ax-titulo-seccion { margin-bottom: 0; }
+
+  .ax-enlace-subrayado {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    font-size: var(--ax-txt-sm);
+    border-bottom: 1px solid var(--ax-dorado);
+  }
+  .ax-enlace-subrayado--claro { color: var(--ax-tech-acento); }
+
+  .ax-texto-cuerpo { margin-top: var(--ax-e4); color: var(--ax-texto-suave); max-width: 60ch; }
+  .ax-texto-inverso { margin-top: var(--ax-e4); color: var(--ax-texto-inverso-tenue); max-width: 60ch; }
+  .ax-nota-inversa {
+    margin-top: var(--ax-e6);
+    font-size: var(--ax-txt-sm);
+    color: var(--ax-texto-inverso-tenue);
+    max-width: 70ch;
+  }
+
+  .ax-diferenciales {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    border-bottom: 1px solid var(--ax-borde);
+  }
+  .ax-diferenciales li { padding: var(--ax-e12) var(--ax-e6) var(--ax-e12) 0; }
+  .ax-diferenciales__texto { margin-top: var(--ax-e3); font-size: var(--ax-txt-sm); color: var(--ax-texto-tenue); }
+
+  .ax-rejilla-servicios {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+    gap: var(--ax-e8);
+  }
+  .ax-tarjeta {
+    background: var(--ax-blanco);
+    border: 1px solid var(--ax-borde);
+    transition: transform var(--ax-medio) var(--ax-curva), box-shadow var(--ax-medio) var(--ax-curva);
+  }
+  .ax-tarjeta:hover { transform: translateY(-5px); box-shadow: var(--ax-sombra-elevada); }
+  .ax-tarjeta > a { display: block; padding-bottom: var(--ax-e8); }
+  .ax-tarjeta__img { aspect-ratio: 3 / 2; overflow: hidden; }
+  .ax-tarjeta__img img { width: 100%; height: 100%; object-fit: cover; transition: transform 1.1s var(--ax-curva); }
+  .ax-tarjeta:hover .ax-tarjeta__img img { transform: scale(1.055); }
+  .ax-tarjeta__num { margin: var(--ax-e6) var(--ax-e6) 0; font-size: var(--ax-txt-sm); color: var(--ax-dorado); letter-spacing: 0.12em; }
+  .ax-tarjeta__titulo { margin: var(--ax-e2) var(--ax-e6) 0; font-size: var(--ax-txt-lg); }
+  .ax-tarjeta__texto { margin: var(--ax-e3) var(--ax-e6) 0; color: var(--ax-texto-tenue); font-size: var(--ax-txt-sm); }
+
+  .ax-split {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: clamp(2rem, 5vw, 4.5rem);
+    align-items: center;
+  }
+  @media (max-width: 900px) {
+    .ax-split { grid-template-columns: 1fr; }
+  }
+  .ax-split__img img { width: 100%; height: auto; border-radius: var(--ax-radio-grande); }
+
+  .ax-visor3d {
+    border: 1px solid var(--ax-borde-oscuro);
+    background: rgba(255, 255, 255, 0.03);
+    padding: 12px;
+    width: 100%;
+  }
+  .ax-visor3d iframe {
+    width: 100%;
+    height: clamp(260px, 62vw, 380px);
+    border: none;
+    display: block;
+  }
+
+  .ax-pasos { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: var(--ax-e8); }
+  .ax-pasos li { border-top: 1px solid var(--ax-borde); padding-top: var(--ax-e6); }
+  .ax-pasos li:first-child { border-top-color: var(--ax-texto); }
+  .ax-pasos__num { font-size: var(--ax-txt-xl); color: var(--ax-dorado); line-height: 1; margin-bottom: var(--ax-e4); }
+  .ax-pasos__texto { margin-top: var(--ax-e2); font-size: var(--ax-txt-sm); color: var(--ax-texto-tenue); }
+
+  .ax-casos { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: var(--ax-e6); }
+  .ax-casos__hueco {
+    aspect-ratio: 4 / 5;
+    display: grid;
+    place-items: center;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--ax-borde-oscuro);
+  }
+  .ax-casos__hueco span {
+    font-size: var(--ax-txt-xs);
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    opacity: 0.45;
+  }
+  .ax-casos__pie { margin-top: var(--ax-e3); font-size: var(--ax-txt-sm); color: var(--ax-texto-inverso-tenue); }
+
+  .ax-split--video { align-items: center; }
+  .ax-video {
+    max-width: 420px;
+    width: 100%;
+    margin-inline: auto;
+    aspect-ratio: 9 / 16;
+    background: var(--ax-negro);
+    border-radius: var(--ax-radio-grande);
+    overflow: hidden;
+    box-shadow: var(--ax-sombra-elevada);
+  }
+  .ax-video video { width: 100%; height: 100%; object-fit: cover; }
+
+  .ax-preguntas-video {
+    margin-block: var(--ax-e8);
+    display: grid;
+  }
+  .ax-preguntas-video li {
+    border-top: 1px solid var(--ax-borde);
+    padding-block: var(--ax-e4);
+    color: var(--ax-texto-suave);
+  }
+  .ax-preguntas-video li:last-child { border-bottom: 1px solid var(--ax-borde); }
+
+  .ax-aviso-resenas {
+    margin-top: var(--ax-e6);
+    padding: var(--ax-e8);
+    background: var(--ax-clinico-superficie);
+    border-left: 3px solid var(--ax-dorado);
+    max-width: 78ch;
+  }
+  .ax-aviso-resenas p { color: var(--ax-texto-suave); font-size: var(--ax-txt-sm); }
+
+  .ax-lista-blog { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: var(--ax-e8); }
+  .ax-lista-blog__img { aspect-ratio: 3 / 2; overflow: hidden; }
+  .ax-lista-blog__img img { width: 100%; height: 100%; object-fit: cover; transition: transform 1.1s var(--ax-curva); }
+  .ax-lista-blog li:hover .ax-lista-blog__img img { transform: scale(1.055); }
+  .ax-lista-blog__cluster {
+    margin-top: var(--ax-e4);
+    font-size: var(--ax-txt-xs);
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ax-dorado);
+  }
+  .ax-lista-blog h3 { margin-top: var(--ax-e2); font-size: var(--ax-txt-base); }
+  .ax-lista-blog__teaser { margin-top: var(--ax-e3); font-size: var(--ax-txt-sm); color: var(--ax-texto-tenue); }
+
+  .ax-split--faq { align-items: start; }
+  .ax-faq details {
+    border-top: 1px solid var(--ax-borde);
+    padding-block: var(--ax-e4);
+  }
+  .ax-faq details:last-child { border-bottom: 1px solid var(--ax-borde); }
+  .ax-faq summary {
+    cursor: pointer;
+    font-weight: var(--ax-peso-medio);
+    min-height: 32px;
+    display: flex;
+    align-items: center;
+  }
+  .ax-faq p { margin-top: var(--ax-e3); color: var(--ax-texto-suave); font-size: var(--ax-txt-sm); }
+
+  .ax-btn--suelto { margin-top: var(--ax-e8); }
+  .ax-centrado { text-align: center; }
+  .ax-centrado h2 { max-width: 20ch; margin-inline: auto; }
+  .ax-cta__texto { margin: var(--ax-e6) auto 0; max-width: 56ch; color: var(--ax-dorado-texto-tenue); }
+  .ax-botonera--centro { justify-content: center; margin-top: var(--ax-e8); }
+</style>

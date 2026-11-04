@@ -1,0 +1,18 @@
+---
+/**
+ * Layout de página pública: base con SEO + cabecera y pie globales.
+ * Las páginas concretas solo aportan su contenido.
+ */
+import Base from './Base.astro';
+import Cabecera from '../components/Cabecera.astro';
+import Pie from '../components/Pie.astro';
+
+const props = Astro.props;
+const rutaActual = props.ruta || '/';
+---
+
+<Base {...props}>
+  <Cabecera slot="cabecera" rutaActual={rutaActual} />
+  <slot />
+  <Pie slot="pie" />
+</Base>

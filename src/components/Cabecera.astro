@@ -1,0 +1,167 @@
+---
+/**
+ * Cabecera global. El menú móvil funciona con un <details>, así que
+ * abre y cierra sin JavaScript: si el script falla, la navegación sigue
+ * siendo utilizable. El único JS es el cambio de fondo al hacer scroll.
+ */
+import { NAV, SITIO } from '../config/sitio.js';
+
+const { rutaActual = '/' } = Astro.props;
+const activa = (url) => url === rutaActual || (url !== '/' && rutaActual.startsWith(url));
+---
+
+<header class="ax-cabecera" data-cabecera>
+  <div class="ax-contenedor ax-cabecera__fila">
+    <a href="/" class="ax-cabecera__logo" aria-label={`${SITIO.nombre} — inicio`}>
+      <img
+        src="/assets/logos/axia-odontologia-logo-negro.webp"
+        alt={`${SITIO.nombre}, clínica odontológica en Barranquilla`}
+        width="132"
+        height="132"
+        fetchpriority="high"
+      />
+    </a>
+
+    <nav class="ax-nav" aria-label="Navegación principal">
+      {NAV.map((i) => (
+        <a href={i.url} aria-current={activa(i.url) ? 'page' : undefined}>{i.texto}</a>
+      ))}
+    </nav>
+
+    <a href="/contacto" class="ax-btn ax-btn--oscuro ax-cabecera__cta" data-track="appointment_click" data-origin="header">
+      Agendar cita
+    </a>
+
+    <details class="ax-menu-movil">
+      <summary aria-label="Abrir menú">
+        <span class="ax-menu-movil__icono" aria-hidden="true"></span>
+      </summary>
+      <nav class="ax-menu-movil__panel" aria-label="Navegación móvil">
+        {NAV.map((i) => <a href={i.url}>{i.texto}</a>)}
+        <a href="/contacto" class="ax-btn ax-btn--primario">Agendar cita</a>
+      </nav>
+    </details>
+  </div>
+</header>
+
+<style>
+  .ax-cabecera {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: color-mix(in srgb, var(--ax-editorial-fondo) 92%, transparent);
+    backdrop-filter: blur(14px);
+    border-bottom: 1px solid var(--ax-borde);
+  }
+
+  .ax-cabecera__fila {
+    height: 82px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--ax-e6);
+  }
+
+  .ax-cabecera__logo img {
+    width: 118px;
+    height: auto;
+    margin-block: -14px;
+  }
+
+  .ax-nav {
+    display: none;
+    align-items: center;
+    gap: var(--ax-e8);
+    font-size: var(--ax-txt-sm);
+  }
+
+  .ax-nav a {
+    color: var(--ax-texto);
+    padding-block: var(--ax-e3);
+    transition: color var(--ax-rapido) var(--ax-curva);
+  }
+
+  .ax-nav a:hover,
+  .ax-nav a[aria-current='page'] {
+    color: var(--ax-dorado);
+  }
+
+  .ax-cabecera__cta {
+    display: none;
+  }
+
+  /* Menú móvil con <details>: sin JS */
+  .ax-menu-movil summary {
+    list-style: none;
+    width: 46px;
+    height: 46px;
+    border: 1px solid var(--ax-borde);
+    border-radius: var(--ax-radio);
+    display: grid;
+    place-items: center;
+    cursor: pointer;
+    background: var(--ax-blanco);
+  }
+
+  .ax-menu-movil summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .ax-menu-movil__icono {
+    display: block;
+    width: 20px;
+    height: 1.5px;
+    background: var(--ax-texto);
+    box-shadow: 0 6px 0 var(--ax-texto), 0 -6px 0 var(--ax-texto);
+  }
+
+  .ax-menu-movil[open] .ax-menu-movil__icono {
+    box-shadow: none;
+    transform: rotate(45deg);
+    position: relative;
+  }
+
+  .ax-menu-movil[open] .ax-menu-movil__icono::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--ax-texto);
+    transform: rotate(90deg);
+  }
+
+  .ax-menu-movil__panel {
+    position: fixed;
+    inset: 82px 0 0;
+    background: var(--ax-editorial-fondo);
+    padding: var(--ax-e8) var(--ax-gutter);
+    display: flex;
+    flex-direction: column;
+    gap: var(--ax-e2);
+    overflow-y: auto;
+  }
+
+  .ax-menu-movil__panel a:not(.ax-btn) {
+    font-size: var(--ax-txt-xl);
+    padding-block: var(--ax-e4);
+    border-bottom: 1px solid var(--ax-borde);
+    /* 44px mínimo de objetivo táctil */
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+  }
+
+  .ax-menu-movil__panel .ax-btn {
+    margin-top: var(--ax-e6);
+    text-align: center;
+  }
+
+  @media (min-width: 1000px) {
+    .ax-nav,
+    .ax-cabecera__cta {
+      display: flex;
+    }
+    .ax-menu-movil {
+      display: none;
+    }
+  }
+</style>

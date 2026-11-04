@@ -1,7 +1,4 @@
 User-agent: *
 Allow: /
 
-Disallow: /api/
-Disallow: /gracias
-
-Sitemap: https://www.axiaodontologia.com/sitemap.xml
+Sitemap: https://www.axiaodontologia.com/sitemap-index.xml

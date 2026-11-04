@@ -1,0 +1,136 @@
+---
+/**
+ * Página individual de cada tratamiento.
+ *
+ * Astro genera un archivo HTML por servicio en tiempo de compilación, con
+ * su propio title, description, canonical y datos estructurados. Sustituye
+ * a la ruta #/servicios/<slug> del canvas, que para Google era la misma
+ * URL que el resto del sitio.
+ */
+import Pagina from '../../layouts/Pagina.astro';
+import { SERVICIOS } from '../../data/servicios.js';
+import { SITIO, wa } from '../../config/sitio.js';
+
+export function getStaticPaths() {
+  return SERVICIOS.map((svc) => ({ params: { slug: svc.slug }, props: { svc } }));
+}
+
+const { svc } = Astro.props;
+const ruta = '/servicios/' + svc.slug;
+
+// Schema del servicio y las migas, además del grafo base del layout.
+const schema = [
+  {
+    '@type': 'Service',
+    name: svc.nav,
+    description: svc.desc,
+    url: SITIO.url + ruta,
+    provider: { '@id': SITIO.url + '/#clinica' },
+    areaServed: { '@type': 'City', name: 'Barranquilla' },
+  },
+  {
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Inicio', item: SITIO.url + '/' },
+      { '@type': 'ListItem', position: 2, name: 'Servicios', item: SITIO.url + '/servicios' },
+      { '@type': 'ListItem', position: 3, name: svc.nav, item: SITIO.url + ruta },
+    ],
+  },
+];
+
+// Las preguntas frecuentes del servicio alimentan el schema FAQPage.
+if (svc.faqs && svc.faqs.length) {
+  schema.push({
+    '@type': 'FAQPage',
+    mainEntity: svc.faqs.map((f) => ({
+      '@type': 'Question',
+      name: f.q,
+      acceptedAnswer: { '@type': 'Answer', text: f.a },
+    })),
+  });
+}
+---
+
+<Pagina
+  titulo={svc.title}
+  descripcion={svc.desc}
+  ruta={ruta}
+  imagen={svc.imgSrc}
+  schema={schema}
+>
+  <article class="ax-contenedor" style="padding-block: var(--ax-seccion)">
+    <nav aria-label="Ruta de navegación" style="margin-bottom: var(--ax-e8); font-size: var(--ax-txt-sm); color: var(--ax-texto-tenue)">
+      <a href="/">Inicio</a>
+      <span aria-hidden="true" style="margin: 0 8px; color: var(--ax-dorado)">/</span>
+      <a href="/servicios">Servicios</a>
+      <span aria-hidden="true" style="margin: 0 8px; color: var(--ax-dorado)">/</span>
+      <span>{svc.nav}</span>
+    </nav>
+
+    <p class="ax-rotulo">{svc.kicker}</p>
+    <h1 style="margin-block: var(--ax-e6)">{svc.h1}</h1>
+    <p style="max-width: 60ch; color: var(--ax-texto-suave); font-size: var(--ax-txt-lg)">{svc.lead}</p>
+
+    <div style="display: flex; flex-wrap: wrap; gap: var(--ax-e3); margin-top: var(--ax-e8)">
+      <a
+        href={wa(svc.waMsg)}
+        data-track="whatsapp_click"
+        data-origin="servicio_hero"
+        style="background: var(--ax-btn-primario-fondo); color: var(--ax-btn-primario-texto); padding: 18px 32px; font-size: var(--ax-txt-sm); letter-spacing: .06em; text-transform: uppercase; font-weight: var(--ax-peso-medio); border-radius: var(--ax-radio)"
+        >Consultar por WhatsApp</a
+      >
+      <a
+        href="/contacto"
+        style="border: 1px solid var(--ax-texto); color: var(--ax-texto); padding: 18px 32px; font-size: var(--ax-txt-sm); letter-spacing: .06em; text-transform: uppercase; border-radius: var(--ax-radio)"
+        >Agendar mi cita</a
+      >
+    </div>
+
+    <img
+      src={svc.imgSrc}
+      alt={`${svc.nav} en Axia Odontología, Barranquilla`}
+      width="1200"
+      height="800"
+      loading="eager"
+      decoding="async"
+      style="margin-top: var(--ax-e12); width: 100%; height: auto; border-radius: var(--ax-radio-grande)"
+    />
+
+    <section style="margin-top: var(--ax-seccion); max-width: 68ch">
+      <h2>{svc.problem.h}</h2>
+      {svc.problem.paras.map((parrafo) => (
+        <p style="margin-top: var(--ax-e4); color: var(--ax-texto-suave)">{parrafo}</p>
+      ))}
+    </section>
+
+    <section style="margin-top: var(--ax-seccion); max-width: 68ch">
+      <h2>{svc.treat.h}</h2>
+      {svc.treat.paras.map((parrafo) => (
+        <p style="margin-top: var(--ax-e4); color: var(--ax-texto-suave)">{parrafo}</p>
+      ))}
+    </section>
+
+    <section style="margin-top: var(--ax-seccion)">
+      <h2>{svc.stepsTitle}</h2>
+      <ol style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: var(--ax-e8); margin-top: var(--ax-e12)">
+        {svc.steps.map((paso) => (
+          <li>
+            <p style="font-size: var(--ax-txt-xl); color: var(--ax-dorado); line-height: 1">{paso.n}</p>
+            <h3 style="margin-top: var(--ax-e3)">{paso.t}</h3>
+            <p style="margin-top: var(--ax-e2); color: var(--ax-texto-tenue); font-size: var(--ax-txt-sm)">{paso.d}</p>
+          </li>
+        ))}
+      </ol>
+    </section>
+
+    <section style="margin-top: var(--ax-seccion); max-width: 68ch">
+      <h2>Lo que más nos preguntan sobre {svc.nav.toLowerCase()}</h2>
+      {svc.faqs.map((f) => (
+        <details style="border-top: 1px solid var(--ax-borde); padding: var(--ax-e4) 0">
+          <summary style="cursor: pointer; font-weight: var(--ax-peso-medio)">{f.q}</summary>
+          <p style="margin-top: var(--ax-e3); color: var(--ax-texto-suave)">{f.a}</p>
+        </details>
+      ))}
+    </section>
+  </article>
+</Pagina>
