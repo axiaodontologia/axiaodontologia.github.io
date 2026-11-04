@@ -1,0 +1,110 @@
+---
+/**
+ * Resultados.
+ *
+ * No hay fotografías de casos todavía. Las que existan solo se publican
+ * con autorización escrita del paciente (Ley 1581 de 2012 y Decreto 1377
+ * de 2013). Hasta entonces, espacios neutros y un aviso honesto: nunca
+ * imágenes de archivo presentadas como casos de la clínica.
+ */
+import Pagina from '../layouts/Pagina.astro';
+import { META } from '../data/meta.js';
+import { SITIO, wa } from '../config/sitio.js';
+
+const m = META.resultados;
+const PENDIENTES = [
+  'Diseño de sonrisa',
+  'Implantes dentales',
+  'Ortodoncia',
+  'Blanqueamiento dental',
+];
+
+const schema = [
+  {
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Inicio', item: SITIO.url + '/' },
+      { '@type': 'ListItem', position: 2, name: 'Resultados', item: SITIO.url + '/resultados' },
+    ],
+  },
+];
+---
+
+<Pagina titulo={m.title} descripcion={m.desc} ruta="/resultados" schema={schema}>
+  <section class="ax-seccion ax-editorial">
+    <div class="ax-contenedor">
+      <p class="ax-rotulo">Resultados</p>
+      <h1 style="margin-block: var(--ax-e6); max-width: 24ch">
+        Resultados de nuestros pacientes en Barranquilla
+      </h1>
+      <p style="max-width: 62ch; color: var(--ax-texto-suave); font-size: var(--ax-txt-lg)">
+        Cada caso que publicamos lleva la autorización escrita de su paciente.
+        Estamos reuniendo ese consentimiento antes de mostrar las fotografías.
+      </p>
+
+      <ul class="ax-casos">
+        {PENDIENTES.map((titulo) => (
+          <li>
+            <div class="ax-casos__hueco" aria-hidden="true">
+              <span>Fotografía pendiente</span>
+            </div>
+            <h2>{titulo}</h2>
+            <p>Caso pendiente de autorización del paciente.</p>
+          </li>
+        ))}
+      </ul>
+
+      <div class="ax-aviso-legal">
+        <h2>Aviso sobre las fotografías clínicas</h2>
+        <p>
+          Las imágenes de resultados se publican únicamente con autorización
+          escrita del paciente, conforme a la Ley 1581 de 2012 y al Decreto
+          1377 de 2013. Los resultados varían según el caso, el diagnóstico y
+          el cuidado posterior: ninguna fotografía debe interpretarse como una
+          promesa de resultado.
+        </p>
+      </div>
+
+      <div class="ax-botonera" style="margin-top: var(--ax-e12)">
+        <a href={wa('Hola, quiero agendar una consulta de valoración.')} class="ax-btn ax-btn--primario" data-track="whatsapp_click" data-origin="resultados">
+          Agendar mi valoración
+        </a>
+        <a href="/servicios" class="ax-btn ax-btn--contorno">Ver los tratamientos</a>
+      </div>
+    </div>
+  </section>
+</Pagina>
+
+<style>
+  .ax-casos {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: var(--ax-e8);
+    margin-top: var(--ax-e16);
+  }
+  .ax-casos__hueco {
+    aspect-ratio: 4 / 3;
+    display: grid;
+    place-items: center;
+    background: rgba(128, 128, 128, 0.09);
+    border: 1px solid rgba(128, 128, 128, 0.2);
+  }
+  .ax-casos__hueco span {
+    font-size: var(--ax-txt-xs);
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    opacity: 0.45;
+  }
+  .ax-casos h2 { margin-top: var(--ax-e4); font-size: var(--ax-txt-base); }
+  .ax-casos p { margin-top: var(--ax-e2); font-size: var(--ax-txt-sm); color: var(--ax-texto-tenue); }
+
+  .ax-aviso-legal {
+    margin-top: var(--ax-e16);
+    padding: var(--ax-e8);
+    background: var(--ax-clinico-superficie);
+    border-left: 3px solid var(--ax-dorado);
+    max-width: 78ch;
+  }
+  .ax-aviso-legal h2 { font-size: var(--ax-txt-base); }
+  .ax-aviso-legal p { margin-top: var(--ax-e3); font-size: var(--ax-txt-sm); color: var(--ax-texto-suave); }
+</style>

@@ -1,0 +1,124 @@
+---
+import Pagina from '../../layouts/Pagina.astro';
+import { SERVICIOS } from '../../data/servicios.js';
+import { META } from '../../data/meta.js';
+import { SITIO } from '../../config/sitio.js';
+
+const m = META.servicios;
+const schema = [
+  {
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Inicio', item: SITIO.url + '/' },
+      { '@type': 'ListItem', position: 2, name: 'Servicios', item: SITIO.url + '/servicios' },
+    ],
+  },
+];
+---
+
+<Pagina titulo={m.title} descripcion={m.desc} ruta="/servicios" schema={schema}>
+  <section class="ax-seccion ax-editorial">
+    <div class="ax-contenedor">
+      <p class="ax-rotulo">Tratamientos</p>
+      <h1 style="margin-block: var(--ax-e6); max-width: 20ch">Servicios odontológicos en Barranquilla</h1>
+      <p style="max-width: 60ch; color: var(--ax-texto-suave); font-size: var(--ax-txt-lg)">
+        Siete especialidades en un solo lugar. Cada tratamiento lo lleva el
+        profesional que se formó en él.
+      </p>
+
+      <ul class="ax-rejilla-servicios">
+        {SERVICIOS.map((s) => (
+          <li class="ax-tarjeta">
+            <a href={`/servicios/${s.slug}`}>
+              <div class="ax-tarjeta__img">
+                <img
+                  src={s.imgSrc}
+                  alt={`${s.nav} en Axia Odontología, Barranquilla`}
+                  width="1200"
+                  height="800"
+                  loading="lazy"
+                  decoding="async"
+                />
+              </div>
+              <p class="ax-tarjeta__num">{s.num}</p>
+              <h2 class="ax-tarjeta__titulo">{s.nav}</h2>
+              <p class="ax-tarjeta__texto">{s.card}</p>
+              <span class="ax-tarjeta__enlace">Conocer el tratamiento</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+</Pagina>
+
+<style>
+  .ax-rejilla-servicios {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+    gap: var(--ax-e8);
+    margin-top: var(--ax-e16);
+  }
+
+  .ax-tarjeta {
+    background: var(--ax-blanco);
+    border: 1px solid var(--ax-borde);
+    transition: transform var(--ax-medio) var(--ax-curva),
+                box-shadow var(--ax-medio) var(--ax-curva);
+  }
+
+  .ax-tarjeta:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--ax-sombra-elevada);
+  }
+
+  .ax-tarjeta > a {
+    display: block;
+    padding-bottom: var(--ax-e8);
+  }
+
+  .ax-tarjeta__img {
+    aspect-ratio: 3 / 2;
+    overflow: hidden;
+  }
+
+  .ax-tarjeta__img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 1.1s var(--ax-curva);
+  }
+
+  .ax-tarjeta:hover .ax-tarjeta__img img {
+    transform: scale(1.055);
+  }
+
+  .ax-tarjeta__num {
+    margin: var(--ax-e6) var(--ax-e6) 0;
+    font-size: var(--ax-txt-sm);
+    color: var(--ax-dorado);
+    letter-spacing: 0.12em;
+  }
+
+  .ax-tarjeta__titulo {
+    margin: var(--ax-e2) var(--ax-e6) 0;
+    font-size: var(--ax-txt-lg);
+  }
+
+  .ax-tarjeta__texto {
+    margin: var(--ax-e3) var(--ax-e6) 0;
+    color: var(--ax-texto-tenue);
+    font-size: var(--ax-txt-sm);
+  }
+
+  .ax-tarjeta__enlace {
+    display: inline-block;
+    margin: var(--ax-e6) var(--ax-e6) 0;
+    font-size: var(--ax-txt-xs);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ax-texto);
+    border-bottom: 1px solid var(--ax-dorado);
+    padding-bottom: 4px;
+  }
+</style>

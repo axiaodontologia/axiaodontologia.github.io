@@ -7,7 +7,7 @@
  * a la ruta #/servicios/<slug> del canvas, que para Google era la misma
  * URL que el resto del sitio.
  */
-import Base from '../../layouts/Base.astro';
+import Pagina from '../../layouts/Pagina.astro';
 import { SERVICIOS } from '../../data/servicios.js';
 import { SITIO, wa } from '../../config/sitio.js';
 
@@ -51,7 +51,7 @@ if (svc.faqs && svc.faqs.length) {
 }
 ---
 
-<Base
+<Pagina
   titulo={svc.title}
   descripcion={svc.desc}
   ruta={ruta}
@@ -133,4 +133,4 @@ if (svc.faqs && svc.faqs.length) {
       ))}
     </section>
   </article>
-</Base>
+</Pagina>

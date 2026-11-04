@@ -1,0 +1,296 @@
+---
+/**
+ * Portada. Migración fiel del contenido del canvas a HTML estático.
+ * El rediseño visual integral es la fase siguiente: aquí lo que cambia es
+ * la arquitectura, no el mensaje.
+ */
+import Pagina from '../layouts/Pagina.astro';
+import { SERVICIOS } from '../data/servicios.js';
+import { ARTICULOS } from '../data/articulos.js';
+import { META } from '../data/meta.js';
+import { SITIO, wa } from '../config/sitio.js';
+
+const m = META.home;
+const destacados = ARTICULOS.slice(0, 3);
+const waPrincipal = wa('Hola, quiero agendar una cita en Axia Odontología.');
+
+const pasos = [
+  { n: '01', t: 'Escribes por WhatsApp', d: 'Nos cuentas qué te pasa o qué quieres mejorar y coordinamos día y hora.' },
+  { n: '02', t: 'Consulta de diagnóstico', d: 'Revisión completa, registros e imágenes. Sin diagnósticos hechos a ojo.' },
+  { n: '03', t: 'Plan y presupuesto', d: 'Te mostramos opciones, tiempos y costos por escrito antes de tocar nada.' },
+  { n: '04', t: 'Tratamiento y control', d: 'Ejecutamos por etapas y seguimos contigo en los controles posteriores.' },
+];
+
+const diferenciales = [
+  { t: 'Atención personalizada', d: 'Un plan por paciente, no un paquete estándar.' },
+  { t: 'Cinco especialistas', d: 'Cada tratamiento lo lleva quien se formó en él.' },
+  { t: 'Tecnología de diagnóstico', d: 'Planificamos sobre imágenes, no sobre supuestos.' },
+  { t: 'Norte de Barranquilla', d: 'Cra. 50 #82-235, con cita previa por WhatsApp.' },
+];
+---
+
+<Pagina titulo={m.title} descripcion={m.desc} ruta="/">
+  <section class="ax-hero ax-oscuro" aria-labelledby="hero-titulo">
+    <div class="ax-hero__fondo" aria-hidden="true">
+      <img
+        src="/assets/images/hero/odontologia-barranquilla-axia-poster.webp"
+        alt=""
+        width="1200"
+        height="800"
+        fetchpriority="high"
+        decoding="async"
+      />
+      <video src="/assets/video/axia-hero-bg.mp4" autoplay muted loop playsinline preload="none" tabindex="-1"></video>
+      <div class="ax-hero__velo"></div>
+    </div>
+
+    <div class="ax-contenedor ax-hero__contenido">
+      <p class="ax-rotulo">Clínica odontológica en Barranquilla</p>
+      <h1 id="hero-titulo">Odontología integral en Barranquilla</h1>
+      <p class="ax-hero__bajada">
+        Ortodoncia, implantes dentales y diseño de sonrisa en el norte de
+        Barranquilla. Cinco profesionales, diagnóstico completo antes de tratar
+        y el plan por escrito desde la primera cita.
+      </p>
+      <div class="ax-botonera">
+        <a href={waPrincipal} class="ax-btn ax-btn--primario" data-track="whatsapp_click" data-origin="hero">Agendar por WhatsApp</a>
+        <a href="/contacto" class="ax-btn ax-btn--contorno" data-track="appointment_click" data-origin="hero">Dejar mis datos</a>
+      </div>
+      <p class="ax-hero__nap">{SITIO.direccion.calle}, {SITIO.direccion.ciudad} · Atención con cita previa</p>
+    </div>
+  </section>
+
+  <section class="ax-editorial" aria-label="Por qué elegir Axia">
+    <div class="ax-contenedor">
+      <ul class="ax-diferenciales">
+        {diferenciales.map((d) => (
+          <li>
+            <p class="ax-rotulo">{d.t}</p>
+            <p class="ax-diferenciales__texto">{d.d}</p>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <section class="ax-seccion ax-clinico" aria-labelledby="home-servicios">
+    <div class="ax-contenedor">
+      <p class="ax-rotulo">Tratamientos</p>
+      <h2 id="home-servicios" class="ax-titulo-seccion">Todo lo que tu boca necesita, en un solo lugar</h2>
+      <ul class="ax-rejilla-servicios">
+        {SERVICIOS.map((s) => (
+          <li class="ax-tarjeta">
+            <a href={`/servicios/${s.slug}`}>
+              <div class="ax-tarjeta__img">
+                <img src={s.imgSrc} alt={`${s.nav} en Axia Odontología, Barranquilla`} width="1200" height="800" loading="lazy" decoding="async" />
+              </div>
+              <p class="ax-tarjeta__num">{s.num}</p>
+              <h3 class="ax-tarjeta__titulo">{s.nav}</h3>
+              <p class="ax-tarjeta__texto">{s.card}</p>
+            </a>
+          </li>
+        ))}
+      </ul>
+      <a href="/servicios" class="ax-btn ax-btn--contorno ax-btn--suelto">Ver todos los servicios</a>
+    </div>
+  </section>
+
+  <section class="ax-seccion ax-editorial" aria-labelledby="home-proceso">
+    <div class="ax-contenedor">
+      <p class="ax-rotulo">Cómo trabajamos</p>
+      <h2 id="home-proceso" class="ax-titulo-seccion">De la primera consulta al alta, en cuatro pasos</h2>
+      <ol class="ax-pasos">
+        {pasos.map((p) => (
+          <li>
+            <p class="ax-pasos__num">{p.n}</p>
+            <h3>{p.t}</h3>
+            <p class="ax-pasos__texto">{p.d}</p>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  <section class="ax-seccion ax-clinico" aria-labelledby="home-blog">
+    <div class="ax-contenedor">
+      <p class="ax-rotulo">Centro de recursos</p>
+      <h2 id="home-blog" class="ax-titulo-seccion">Respuestas a lo que más nos preguntan</h2>
+      <ul class="ax-lista-blog">
+        {destacados.map((a) => (
+          <li>
+            <a href={`/blog/${a.slug}`}>
+              <div class="ax-lista-blog__img">
+                <img src={a.imgSrc} alt={a.h1} width="1200" height="800" loading="lazy" decoding="async" />
+              </div>
+              <p class="ax-lista-blog__cluster">{a.cluster}</p>
+              <h3>{a.h1}</h3>
+              <p class="ax-lista-blog__teaser">{a.teaser}</p>
+            </a>
+          </li>
+        ))}
+      </ul>
+      <a href="/blog" class="ax-btn ax-btn--contorno ax-btn--suelto">Ir al blog</a>
+    </div>
+  </section>
+
+  <section class="ax-seccion ax-oscuro" aria-labelledby="home-cta">
+    <div class="ax-contenedor ax-centrado">
+      <h2 id="home-cta">Empecemos por una consulta de diagnóstico</h2>
+      <p class="ax-cta__texto">
+        Cuéntanos qué te preocupa. Revisamos, te explicamos qué está pasando y
+        decidimos juntos el siguiente paso.
+      </p>
+      <div class="ax-botonera ax-botonera--centro">
+        <a href={waPrincipal} class="ax-btn ax-btn--primario" data-track="whatsapp_click" data-origin="home_cta">Consultar por WhatsApp</a>
+        <a href="/contacto" class="ax-btn ax-btn--contorno">Agendar mi cita</a>
+      </div>
+    </div>
+  </section>
+</Pagina>
+
+<style>
+  .ax-hero {
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    min-height: clamp(560px, 86vh, 860px);
+  }
+  .ax-hero__fondo { position: absolute; inset: 0; }
+  .ax-hero__fondo img,
+  .ax-hero__fondo video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .ax-hero__velo {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(100deg, rgba(0, 0, 0, 0.9) 0%, rgba(0, 0, 0, 0.74) 44%, rgba(0, 0, 0, 0.34) 100%);
+  }
+  .ax-hero__contenido {
+    position: relative;
+    z-index: 1;
+    padding-block: var(--ax-seccion);
+    max-width: 46ch;
+  }
+  .ax-hero h1 { margin-block: var(--ax-e6); color: var(--ax-blanco); }
+  .ax-hero__bajada {
+    font-size: var(--ax-txt-lg);
+    color: var(--ax-texto-inverso-tenue);
+    margin-bottom: var(--ax-e8);
+  }
+  .ax-hero__nap {
+    margin-top: var(--ax-e6);
+    font-size: var(--ax-txt-sm);
+    color: var(--ax-texto-inverso-tenue);
+  }
+
+  .ax-titulo-seccion {
+    margin-block: var(--ax-e6) var(--ax-e12);
+    max-width: 24ch;
+  }
+
+  .ax-diferenciales {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    border-bottom: 1px solid var(--ax-borde);
+  }
+  .ax-diferenciales li { padding: var(--ax-e12) var(--ax-e6) var(--ax-e12) 0; }
+  .ax-diferenciales__texto {
+    margin-top: var(--ax-e3);
+    font-size: var(--ax-txt-sm);
+    color: var(--ax-texto-tenue);
+  }
+
+  .ax-rejilla-servicios {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+    gap: var(--ax-e8);
+  }
+  .ax-tarjeta {
+    background: var(--ax-blanco);
+    border: 1px solid var(--ax-borde);
+    transition: transform var(--ax-medio) var(--ax-curva), box-shadow var(--ax-medio) var(--ax-curva);
+  }
+  .ax-tarjeta:hover { transform: translateY(-5px); box-shadow: var(--ax-sombra-elevada); }
+  .ax-tarjeta > a { display: block; padding-bottom: var(--ax-e8); }
+  .ax-tarjeta__img { aspect-ratio: 3 / 2; overflow: hidden; }
+  .ax-tarjeta__img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 1.1s var(--ax-curva);
+  }
+  .ax-tarjeta:hover .ax-tarjeta__img img { transform: scale(1.055); }
+  .ax-tarjeta__num {
+    margin: var(--ax-e6) var(--ax-e6) 0;
+    font-size: var(--ax-txt-sm);
+    color: var(--ax-dorado);
+    letter-spacing: 0.12em;
+  }
+  .ax-tarjeta__titulo { margin: var(--ax-e2) var(--ax-e6) 0; font-size: var(--ax-txt-lg); }
+  .ax-tarjeta__texto {
+    margin: var(--ax-e3) var(--ax-e6) 0;
+    color: var(--ax-texto-tenue);
+    font-size: var(--ax-txt-sm);
+  }
+
+  .ax-pasos {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: var(--ax-e8);
+  }
+  .ax-pasos li { border-top: 1px solid var(--ax-borde); padding-top: var(--ax-e6); }
+  .ax-pasos li:first-child { border-top-color: var(--ax-texto); }
+  .ax-pasos__num {
+    font-size: var(--ax-txt-xl);
+    color: var(--ax-dorado);
+    line-height: 1;
+    margin-bottom: var(--ax-e4);
+  }
+  .ax-pasos__texto {
+    margin-top: var(--ax-e2);
+    font-size: var(--ax-txt-sm);
+    color: var(--ax-texto-tenue);
+  }
+
+  .ax-lista-blog {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: var(--ax-e8);
+  }
+  .ax-lista-blog__img { aspect-ratio: 3 / 2; overflow: hidden; }
+  .ax-lista-blog__img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 1.1s var(--ax-curva);
+  }
+  .ax-lista-blog li:hover .ax-lista-blog__img img { transform: scale(1.055); }
+  .ax-lista-blog__cluster {
+    margin-top: var(--ax-e4);
+    font-size: var(--ax-txt-xs);
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ax-dorado);
+  }
+  .ax-lista-blog h3 { margin-top: var(--ax-e2); font-size: var(--ax-txt-base); }
+  .ax-lista-blog__teaser {
+    margin-top: var(--ax-e3);
+    font-size: var(--ax-txt-sm);
+    color: var(--ax-texto-tenue);
+  }
+
+  .ax-btn--suelto { margin-top: var(--ax-e12); }
+  .ax-centrado { text-align: center; }
+  .ax-centrado h2 { max-width: 20ch; margin-inline: auto; }
+  .ax-cta__texto {
+    margin: var(--ax-e6) auto 0;
+    max-width: 56ch;
+    color: var(--ax-texto-inverso-tenue);
+  }
+  .ax-botonera--centro { justify-content: center; margin-top: var(--ax-e8); }
+</style>

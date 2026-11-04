@@ -1,0 +1,204 @@
+---
+/**
+ * Contacto.
+ *
+ * El formulario NO simula envíos. Mientras no exista backend operativo
+ * (la Cloud Function requiere el plan Blaze), queda deshabilitado con un
+ * aviso visible y WhatsApp como canal alternativo. Un paciente que cree
+ * haber escrito y nunca recibe respuesta es peor que no tener formulario.
+ *
+ * Para activarlo: poner BACKEND_ACTIVO en true cuando /api/contact responda.
+ */
+import Pagina from '../layouts/Pagina.astro';
+import { META } from '../data/meta.js';
+import { SITIO, wa } from '../config/sitio.js';
+
+const BACKEND_ACTIVO = false;
+
+const m = META.contacto;
+const waPrincipal = wa('Hola, quiero agendar una cita en Axia Odontología.');
+
+const schema = [
+  {
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Inicio', item: SITIO.url + '/' },
+      { '@type': 'ListItem', position: 2, name: 'Contacto', item: SITIO.url + '/contacto' },
+    ],
+  },
+];
+---
+
+<Pagina titulo={m.title} descripcion={m.desc} ruta="/contacto" schema={schema}>
+  <section class="ax-seccion ax-editorial">
+    <div class="ax-contenedor">
+      <p class="ax-rotulo">Contacto</p>
+      <h1 style="margin-block: var(--ax-e6); max-width: 24ch">Agenda tu cita en Axia Odontología</h1>
+      <p style="max-width: 60ch; color: var(--ax-texto-suave); font-size: var(--ax-txt-lg)">
+        Lo más rápido es WhatsApp: te respondemos en horario de atención.
+      </p>
+      <a href={waPrincipal} class="ax-btn ax-btn--primario" style="margin-top: var(--ax-e8)" data-track="whatsapp_click" data-origin="contacto_hero">
+        Hablar por WhatsApp
+      </a>
+    </div>
+  </section>
+
+  <section class="ax-seccion ax-clinico">
+    <div class="ax-contenedor ax-contacto">
+      <div class="ax-contacto__form">
+        <h2>Escríbenos</h2>
+
+        {!BACKEND_ACTIVO && (
+          <div class="ax-aviso" role="status">
+            <p class="ax-aviso__titulo">El formulario todavía no está activo</p>
+            <p>
+              Estamos terminando de conectar el envío de correos. Mientras
+              tanto, escríbenos por WhatsApp y te atendemos enseguida: es el
+              canal por el que respondemos más rápido.
+            </p>
+            <a href={waPrincipal} class="ax-btn ax-btn--primario" style="margin-top: var(--ax-e4)" data-track="whatsapp_click" data-origin="contacto_aviso">
+              Escribir por WhatsApp
+            </a>
+          </div>
+        )}
+
+        {BACKEND_ACTIVO && (
+          <form method="post" action="/api/contact" class="ax-form">
+            <p class="ax-form__nota">Todos los campos marcados con * son obligatorios.</p>
+            <div class="ax-form__fila">
+              <label>
+                <span>Nombre *</span>
+                <input type="text" name="name" autocomplete="given-name" required />
+              </label>
+              <label>
+                <span>Apellido *</span>
+                <input type="text" name="lastname" autocomplete="family-name" required />
+              </label>
+            </div>
+            <div class="ax-form__fila">
+              <label>
+                <span>Email *</span>
+                <input type="email" name="email" autocomplete="email" required />
+              </label>
+              <label>
+                <span>Teléfono *</span>
+                <input type="tel" name="phone" autocomplete="tel" required />
+              </label>
+            </div>
+            <label>
+              <span>Cuéntanos qué necesitas *</span>
+              <textarea name="message" rows="5" required></textarea>
+            </label>
+            <label class="ax-form__consentimiento">
+              <input type="checkbox" name="consent" required />
+              <span>
+                Autorizo el tratamiento de mis datos personales conforme a la
+                <a href="/politica-de-privacidad">política de privacidad</a>.
+              </span>
+            </label>
+            <button type="submit" class="ax-btn ax-btn--primario">Enviar solicitud</button>
+          </form>
+        )}
+      </div>
+
+      <aside class="ax-contacto__datos">
+        <h2>Datos de contacto</h2>
+        <dl>
+          <dt class="ax-rotulo">WhatsApp</dt>
+          <dd><a href={waPrincipal}>+57 315 967 9895</a></dd>
+
+          <dt class="ax-rotulo">Email</dt>
+          <dd><a href={`mailto:${SITIO.email}`}>{SITIO.email}</a></dd>
+
+          <dt class="ax-rotulo">Dirección</dt>
+          <dd>
+            <address>
+              {SITIO.direccion.calle}<br />
+              {SITIO.direccion.ciudad}, {SITIO.direccion.region}
+            </address>
+          </dd>
+
+          <dt class="ax-rotulo">Atención</dt>
+          <dd>Con cita previa.</dd>
+        </dl>
+
+        <p class="ax-contacto__pendiente">
+          <strong>Pendiente:</strong> confirmar los horarios de atención y el
+          enlace del Perfil de Empresa de Google antes de publicarlos.
+        </p>
+      </aside>
+    </div>
+  </section>
+</Pagina>
+
+<style>
+  .ax-contacto {
+    display: grid;
+    grid-template-columns: 1.15fr 0.85fr;
+    gap: var(--ax-e16);
+    align-items: start;
+  }
+
+  @media (max-width: 860px) {
+    .ax-contacto { grid-template-columns: 1fr; }
+  }
+
+  .ax-contacto__form,
+  .ax-contacto__datos {
+    background: var(--ax-blanco);
+    border: 1px solid var(--ax-borde);
+    padding: clamp(1.75rem, 3.4vw, 3rem);
+  }
+
+  .ax-aviso {
+    margin-top: var(--ax-e6);
+    padding: var(--ax-e6);
+    background: var(--ax-clinico-superficie);
+    border-left: 3px solid var(--ax-dorado);
+  }
+
+  .ax-aviso__titulo {
+    font-weight: var(--ax-peso-medio);
+    margin-bottom: var(--ax-e3);
+  }
+
+  .ax-form { display: grid; gap: var(--ax-e4); margin-top: var(--ax-e6); }
+  .ax-form__nota { font-size: var(--ax-txt-sm); color: var(--ax-texto-tenue); }
+  .ax-form__fila { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--ax-e4); }
+  .ax-form label { display: grid; gap: var(--ax-e2); }
+  .ax-form label > span {
+    font-size: var(--ax-txt-xs);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ax-texto-tenue);
+  }
+  .ax-form input,
+  .ax-form textarea {
+    padding: var(--ax-e3) var(--ax-e4);
+    border: 1px solid var(--ax-borde);
+    background: var(--ax-editorial-fondo);
+    border-radius: var(--ax-radio);
+    min-height: 48px;
+  }
+  .ax-form__consentimiento {
+    grid-template-columns: auto 1fr;
+    align-items: start;
+    gap: var(--ax-e3);
+  }
+  .ax-form__consentimiento span { font-size: var(--ax-txt-sm); color: var(--ax-texto-suave); }
+  .ax-form__consentimiento a { text-decoration: underline; }
+
+  .ax-contacto__datos dl { margin-top: var(--ax-e6); }
+  .ax-contacto__datos dt { margin-top: var(--ax-e6); }
+  .ax-contacto__datos dd { margin: var(--ax-e2) 0 0; }
+  .ax-contacto__datos address { font-style: normal; }
+  .ax-contacto__datos a { border-bottom: 1px solid var(--ax-dorado); }
+
+  .ax-contacto__pendiente {
+    margin-top: var(--ax-e8);
+    padding-top: var(--ax-e4);
+    border-top: 1px solid var(--ax-borde);
+    font-size: var(--ax-txt-sm);
+    color: var(--ax-texto-tenue);
+  }
+</style>

@@ -5,9 +5,11 @@
   "description": "Sitio web de Axia Odontología — clínica odontológica en Barranquilla",
   "type": "module",
   "scripts": {
-    "build:pages": "node scripts/build-pages.js",
-    "dev": "node scripts/dev-server.js",
-    "preview:pages": "node scripts/build-pages.js && node scripts/serve-site.js"
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "verificar": "astro build && node scripts/verificar.js",
+    "build:canvas": "node scripts/build-pages.js"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.4",

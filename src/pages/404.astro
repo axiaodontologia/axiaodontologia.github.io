@@ -1,0 +1,60 @@
+---
+import Pagina from '../layouts/Pagina.astro';
+import { META } from '../data/meta.js';
+import { SERVICIOS } from '../data/servicios.js';
+
+const m = META.e404;
+---
+
+<Pagina titulo={m.title} descripcion={m.desc} ruta="/404" noindex={true}>
+  <section class="ax-seccion ax-editorial">
+    <div class="ax-contenedor" style="max-width: 680px">
+      <p class="ax-404">404</p>
+      <h1>Esta página no está disponible</h1>
+      <p class="ax-404__texto">
+        Puede que el enlace esté roto o que la página haya cambiado de
+        dirección. Desde aquí puedes seguir a lo que buscabas.
+      </p>
+
+      <ul class="ax-404__enlaces">
+        <li><a href="/">Inicio</a></li>
+        <li><a href="/servicios">Todos los servicios</a></li>
+        <li><a href="/nosotros">Nosotros</a></li>
+        <li><a href="/blog">Blog</a></li>
+        <li><a href="/contacto">Contacto</a></li>
+      </ul>
+
+      <p class="ax-rotulo" style="margin-top: var(--ax-e12)">Tratamientos</p>
+      <ul class="ax-404__servicios">
+        {SERVICIOS.map((s) => (
+          <li><a href={`/servicios/${s.slug}`}>{s.nav}</a></li>
+        ))}
+      </ul>
+    </div>
+  </section>
+</Pagina>
+
+<style>
+  .ax-404 {
+    font-size: clamp(4rem, 10vw, 7rem);
+    line-height: 1;
+    color: var(--ax-beige);
+    margin-bottom: var(--ax-e6);
+  }
+  .ax-404__texto { margin-top: var(--ax-e6); color: var(--ax-texto-suave); }
+  .ax-404__enlaces,
+  .ax-404__servicios {
+    margin-top: var(--ax-e6);
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--ax-e3) var(--ax-e6);
+  }
+  .ax-404__enlaces a,
+  .ax-404__servicios a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    border-bottom: 1px solid var(--ax-dorado);
+  }
+  .ax-404__servicios { font-size: var(--ax-txt-sm); }
+</style>

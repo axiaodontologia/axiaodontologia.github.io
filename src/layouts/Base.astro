@@ -10,6 +10,7 @@
 import { SITIO } from '../config/sitio.js';
 import '../styles/tokens.css';
 import '../styles/base.css';
+import RedireccionHash from '../components/RedireccionHash.astro';
 
 const {
   titulo,
@@ -93,6 +94,7 @@ const grafo = schema ? [...grafoBase, ...schema] : grafoBase;
   </head>
 
   <body>
+    <RedireccionHash />
     <a class="ax-saltar" href="#principal">Saltar al contenido</a>
     <slot name="cabecera" />
     <main id="principal">

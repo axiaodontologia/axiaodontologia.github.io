@@ -140,3 +140,93 @@ select {
 .ax-oscuro .ax-rotulo {
   color: var(--ax-tech-acento);
 }
+
+/* ---------------------------------------------------------------
+   BOTONES
+   Las combinaciones están fijadas por los contrastes medidos:
+   negro sobre beige 11,52:1 · blanco sobre carbón 12,63:1.
+   Altura mínima de 48px para que el objetivo táctil sea cómodo.
+   --------------------------------------------------------------- */
+.ax-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 48px;
+  padding: var(--ax-e4) var(--ax-e8);
+  font-size: var(--ax-txt-sm);
+  font-weight: var(--ax-peso-medio);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  border-radius: var(--ax-radio);
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: background var(--ax-medio) var(--ax-curva),
+              color var(--ax-medio) var(--ax-curva),
+              border-color var(--ax-medio) var(--ax-curva);
+}
+
+.ax-btn--primario {
+  background: var(--ax-btn-primario-fondo);
+  color: var(--ax-btn-primario-texto);
+}
+
+.ax-btn--primario:hover {
+  background: var(--ax-btn-primario-hover-fondo);
+  color: var(--ax-btn-primario-hover-texto);
+}
+
+.ax-btn--oscuro {
+  background: var(--ax-btn-oscuro-fondo);
+  color: var(--ax-btn-oscuro-texto);
+}
+
+.ax-btn--oscuro:hover {
+  background: var(--ax-dorado);
+  color: var(--ax-negro);
+}
+
+/* Contorno: sobre fondo claro */
+.ax-btn--contorno {
+  border-color: var(--ax-texto);
+  color: var(--ax-texto);
+}
+
+.ax-btn--contorno:hover {
+  background: var(--ax-texto);
+  color: var(--ax-blanco);
+}
+
+/* Contorno sobre fondo oscuro */
+.ax-oscuro .ax-btn--contorno {
+  border-color: rgba(255, 255, 255, 0.45);
+  color: var(--ax-blanco);
+}
+
+.ax-oscuro .ax-btn--contorno:hover {
+  background: var(--ax-blanco);
+  color: var(--ax-negro);
+}
+
+.ax-botonera {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--ax-e3);
+}
+
+/* Secciones y ambientes */
+.ax-seccion {
+  padding-block: var(--ax-seccion);
+}
+
+.ax-oscuro {
+  background: var(--ax-tech-fondo);
+  color: var(--ax-texto-inverso);
+}
+
+.ax-clinico {
+  background: var(--ax-clinico-fondo);
+}
+
+.ax-editorial {
+  background: var(--ax-editorial-fondo);
+}
