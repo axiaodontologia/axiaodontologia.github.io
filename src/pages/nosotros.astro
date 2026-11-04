@@ -174,12 +174,23 @@ const schema = [
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
     gap: var(--ax-e8);
   }
+  /* Las fotos son recortes: cuatro con transparencia y una con fondo
+     blanco sólido, a escalas distintas. Se unifican sobre una tarjeta
+     blanca con  y anclaje abajo, de modo que ninguna cabeza
+     queda cortada y la del fondo blanco no se distingue del resto. */
+  .ax-equipo li { background: var(--ax-blanco); border: 1px solid var(--ax-borde); }
   .ax-equipo img {
     width: 100%;
-    aspect-ratio: 2 / 3;
-    object-fit: cover;
-    object-position: top center;
+    /* height:auto es imprescindible: el atributo height del HTML gana
+       sobre aspect-ratio y dejaba la foto de 1536px de alto. */
+    height: auto;
+    aspect-ratio: 3 / 4;
+    object-fit: contain;
+    object-position: bottom center;
+    background: var(--ax-blanco);
   }
+  .ax-equipo h3 { padding-inline: var(--ax-e4); }
+  .ax-equipo p { padding: 0 var(--ax-e4) var(--ax-e6); }
   .ax-equipo h3 { margin-top: var(--ax-e4); font-size: var(--ax-txt-base); }
   .ax-equipo p { margin-top: var(--ax-e1); font-size: var(--ax-txt-sm); color: var(--ax-texto-tenue); }
 
