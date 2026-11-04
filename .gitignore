@@ -23,3 +23,6 @@ Thumbs.db
 
 # Caché local de despliegues de Firebase
 .firebase/
+
+# Buzón de originales sin optimizar (fotos y videos en bruto)
+_entrada/
