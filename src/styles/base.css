@@ -270,3 +270,22 @@ select {
   background: var(--ax-negro);
   color: var(--ax-dorado);
 }
+
+/* ---------------------------------------------------------------
+   AMBIENTE GRIS
+   El gris corporativo como superficie. El texto va en blanco
+   (12,63:1) y el acento en dorado claro (5,63:1): el dorado normal
+   solo llega a 3,82:1 sobre este fondo y no se usa para texto.
+   --------------------------------------------------------------- */
+.ax-gris {
+  background: var(--ax-gris-fondo);
+  color: var(--ax-gris-texto);
+}
+
+.ax-gris .ax-rotulo {
+  color: var(--ax-gris-acento);
+}
+
+.ax-gris .ax-rotulo::before {
+  background: var(--ax-gris-acento);
+}

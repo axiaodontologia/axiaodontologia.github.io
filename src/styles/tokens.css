@@ -55,6 +55,14 @@
   --ax-tech-acento: var(--ax-dorado-claro);  /* 7,9:1 sobre negro */
   --ax-tech-texto: var(--ax-texto-inverso);
 
+  /* 5. GRIS — el gris corporativo como superficie, para el pie. Admite
+     texto blanco (12,63:1) y el dorado claro como acento (5,63:1). */
+  --ax-gris-fondo: var(--ax-carbon);
+  --ax-gris-texto: var(--ax-blanco);               /* 12,63:1 · AAA */
+  --ax-gris-texto-tenue: rgba(255, 255, 255, 0.76);
+  --ax-gris-acento: var(--ax-dorado-claro);        /* 5,63:1 · AA  */
+  --ax-gris-borde: rgba(255, 255, 255, 0.16);
+
   /* 4. DORADO — el color de marca como superficie. Solo admite texto
      oscuro: blanco sobre dorado da 3,30:1 y no pasa. Con negro, 6,36:1. */
   --ax-dorado-fondo: var(--ax-dorado);
